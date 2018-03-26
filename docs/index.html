@@ -1250,7 +1250,7 @@ function main() {
   <a class="reference reference-toplevel" href="#15" id="65">Iterators</a>
   <ul class="simple simple-toc-section">
       <li><a class="reference" href="#accumulate.i,openArray[T],proc(T,T)"
-    title="accumulate[T](x: openArray[T]; f: proc (a, b: T): T): T"><wbr />accumulate<span class="attachedType" style="visibility:hidden"></span></a></li>
+    title="accumulate[T](s: openArray[T]; f: proc (a, b: T): T): T"><wbr />accumulate<span class="attachedType" style="visibility:hidden"></span></a></li>
   <li><a class="reference" href="#chain.i,varargs[seq[T]]"
     title="chain[T](xs: varargs[seq[T]]): T"><wbr />chain<span class="attachedType" style="visibility:hidden"></span></a></li>
   <li><a class="reference" href="#compress.i,openArray[T],openArray[bool]"
@@ -1278,7 +1278,7 @@ function main() {
 <dl class="item">
 <dt id="count"><a name="count,SomeNumber"></a><pre><span class="Keyword">proc</span> <span class="Identifier">count</span><span class="Other">[</span><span class="Identifier">SomeNumber</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">start</span><span class="Other">:</span> <span class="Identifier">SomeNumber</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">SomeNumber</span></pre></dt>
 <dd>
-<p>Counts from a <cite>start</cite> to infinity.</p>
+<p>Infinite iterator, counts from a <cite>start</cite> to infinity.</p>
 <p><cite>start</cite> needs to be either int of float. If you need to have a step different than 1, use <cite>count(start, step)</cite>.</p>
 
 <strong class="examples_text">Examples:</strong>
@@ -1299,7 +1299,7 @@ function main() {
 </dd>
 <dt id="count"><a name="count,SomeNumber,SomeNumber"></a><pre><span class="Keyword">proc</span> <span class="Identifier">count</span><span class="Other">[</span><span class="Identifier">SomeNumber</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">start</span><span class="Other">,</span> <span class="Identifier">step</span><span class="Other">:</span> <span class="Identifier">SomeNumber</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">SomeNumber</span></pre></dt>
 <dd>
-<p>Counts from a <cite>start</cite> to infinity with a <cite>step</cite> step-size.</p>
+<p>Infinite iterator, counts from a <cite>start</cite> to infinity with a <cite>step</cite> step-size.</p>
 <p><cite>start</cite> and <cite>step</cite> need to be of the same type, either int of float. If your step is 1, you can use <cite>count(start)</cite>.</p>
 
 <strong class="examples_text">Examples:</strong>
@@ -1320,7 +1320,7 @@ function main() {
 </dd>
 <dt id="cycle"><a name="cycle,openArray[T]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">cycle</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
 <dd>
-Infinite iterator, cycles through the members of a sequence.
+Infinite iterator, cycles through the members of a sequence -- when it gets to the end of it, it starts again from the beginning.
 <strong class="examples_text">Examples:</strong>
 <pre class="listing"><span class="Keyword">let</span>
   <span class="Identifier">a</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="DecNumber">1</span><span class="Other">,</span> <span class="DecNumber">3</span><span class="Other">,</span> <span class="DecNumber">9</span><span class="Other">,</span> <span class="DecNumber">5</span><span class="Other">]</span>
@@ -1353,7 +1353,7 @@ Infinite iterator, cycles through the members of a sequence.
 </dd>
 <dt id="repeat"><a name="repeat,T,int"></a><pre><span class="Keyword">proc</span> <span class="Identifier">repeat</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">x</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span> <span class="Identifier">times</span> <span class="Other">=</span> <span class="DecNumber">0</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
 <dd>
-<p>Infinite iterator which yields an object <cite>x</cite> infinite numer of times.</p>
+<p>Infinite iterator which yields an object <cite>x</cite> infinite numer of times if <cite>times</cite> is not specified.</p>
 <p>If <cite>times</cite> is specified, it runs <cite>times</cite> number of times.</p>
 
 <strong class="examples_text">Examples:</strong>
@@ -1393,10 +1393,10 @@ Infinite iterator, cycles through the members of a sequence.
 <div class="section" id="15">
 <h1><a class="toc-backref" href="#15">Iterators</a></h1>
 <dl class="item">
-<dt id="accumulate"><a name="accumulate.i,openArray[T],proc(T,T)"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">accumulate</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">x</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">f</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
+<dt id="accumulate"><a name="accumulate.i,openArray[T],proc(T,T)"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">accumulate</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">f</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
 <dd>
 <p>Iterator which yields accumulated results of binary function <cite>f</cite>.</p>
-<p>The first returned value is the first membur of a passed sequence <cite>x</cite>.</p>
+<p>The result of <cite>f</cite> must be of the same type as members of <cite>s</cite>. The first yielded value is the first membur of <cite>s</cite>.</p>
 
 <strong class="examples_text">Examples:</strong>
 <pre class="listing"><span class="Keyword">let</span>
@@ -1618,7 +1618,7 @@ Iterator which yields elements of <cite>s</cite> as long as predicate is true.
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2018-03-24 18:56:10 UTC</small>
+        <small>Made with Nim. Generated: 2018-03-26 08:52:30 UTC</small>
       </div>
     </div>
   </div>

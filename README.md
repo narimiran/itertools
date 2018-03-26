@@ -124,7 +124,7 @@ for i in chain(@[1, 3, 5], @[2, 4, 6], @[7, 8, 9]):
 # 1; 3; 5; 2; 4; 6; 7; 8; 9
 ```
 
-For more examples, see the [documentation](https://rawgit.com/narimiran/itertools/master/itertools.html).
+For more examples, see the [documentation](https://narimiran.github.io/itertools).
 
 &nbsp;
 
@@ -136,7 +136,7 @@ For more examples, see the [documentation](https://rawgit.com/narimiran/itertool
 There is probably a lot of room for improvement.
 Feel free to fork the repo and submit your PRs.
 
-Before submitting, run `nim doc src/itertools.nim` to make sure that all the asserts in `runnableExamples` are passing.
+Before submitting, run `nim doc -o:./docs/index.html ./src/itertools.nim` to make sure that all the asserts in `runnableExamples` are passing.
 
 &nbsp;
 
