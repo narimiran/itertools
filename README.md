@@ -81,43 +81,44 @@ for x in d():
 import itertools
 import future # to use `=>` for anonymous proc
 
-let
+
+let # you can use: sequences, arrays, strings
   numbers = @[1, 3, 7, 8, 4, 2, 6, 5, 9]
-  letters = ['a', 'c', 't', 'n', 'e', 'b']
-# both sequences and arrays can be used
+  constants = [2.7183, 3.1416, 1.4142, 1.7321]
+  word = "abracadabra"
 
 
-for i in accumulate(numbers, (x, y) => x + y):
+for i in accumulate(constants, (x, y) => x + y):
   echo i
-# 1; 4; 11; 19; 23; 25; 31; 36; 45 
+# 2.7183; 5.8599; 7.2741; 9.0062
 
-for i in compress(letters, [true, true, false, true]):
+for i in compress(numbers, [true, true, false, true, false, true]):
   echo i
-# a; c; n
+# 1; 3; 8; 2
 
-for i in dropWhile(numbers, x => (x mod 2 == 1)):
+for i in dropWhile(numbers, x => (x != 8)):
   echo i
 # 8; 4; 2; 6; 5; 9
 
-for i in filterFalse(letters, x => (x in {'a', 'e', 'i', 'o', 'u'})):
+for i in filterFalse(word, x => (x == 'a')):
   echo i
-# c; t; n; b
+# b; r; c; d; b; r
 
 for i in islice(numbers, 5):
   echo i
 # 2; 6; 5; 9
 
-for i in islice(letters, 1, step=2):
+for i in islice(word, 1, step=2):
   echo i
-# c; n; b
+# b; a; a; a; r
 
 for i in islice(numbers, stop=5, step=2):
   echo i
 # 1; 7; 4
 
-for i in takeWhile(letters, x => (x != 'n')):
+for i in takeWhile(constants, x => (x >= 2.0)):
   echo i
-# a; c; t
+# 2.7183; 3.1416
 
 for i in chain(@[1, 3, 5], @[2, 4, 6], @[7, 8, 9]):
   echo i
