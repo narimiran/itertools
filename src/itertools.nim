@@ -1,4 +1,4 @@
-proc count*[SomeNumber](start: SomeNumber): iterator(): SomeNumber =
+proc count*(start: SomeNumber): iterator(): SomeNumber =
   ## Infinite iterator, counts from a `start` to infinity.
   ##
   ## `start` needs to be either int of float.
@@ -23,7 +23,7 @@ proc count*[SomeNumber](start: SomeNumber): iterator(): SomeNumber =
       n += 1
 
 
-proc count*[SomeNumber](start, step: SomeNumber): iterator(): SomeNumber =
+proc count*(start, step: SomeNumber): iterator(): SomeNumber =
   ## Infinite iterator, counts from a `start` to infinity with a `step` step-size.
   ##
   ## `start` and `step` need to be of the same type, either int of float.
