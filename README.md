@@ -33,6 +33,7 @@ Required Nim version is at least 0.18.0.
     * compress
     * dropWhile
     * filterFalse
+    * groupBy
     * islice
     * takeWhile
 
@@ -43,6 +44,7 @@ Required Nim version is at least 0.18.0.
 
 ## Usage
 
+For more comprehensive examples, see the [documentation](https://narimiran.github.io/itertools).
 
 
 
@@ -104,6 +106,14 @@ for i in filterFalse(word, x => (x == 'a')):
   echo i
 # b; r; c; d; b; r
 
+for key, group in numbers.groupBy(x => x mod 2 == 0):
+  echo "key: ", key, " group: ", group
+# key: true, group: @[8, 4, 2, 6]; key: false, group: @[1, 3, 7, 5, 9]
+
+for key, group in word.groupBy():
+  echo group
+# @['a', 'a', 'a', 'a', 'a']; @['b', 'b']; @['c']; @['d']; @['r', 'r']
+
 for i in islice(numbers, 5):
   echo i
 # 2; 6; 5; 9
@@ -125,7 +135,6 @@ for i in chain(@[1, 3, 5], @[2, 4, 6], @[7, 8, 9]):
 # 1; 3; 5; 2; 4; 6; 7; 8; 9
 ```
 
-For more examples, see the [documentation](https://narimiran.github.io/itertools).
 
 &nbsp;
 

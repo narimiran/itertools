@@ -1,3 +1,6 @@
+import tables
+
+
 proc count*(start: SomeNumber): iterator(): SomeNumber =
   ## Infinite iterator, counts from a `start` to infinity.
   ##
@@ -129,7 +132,7 @@ iterator accumulate*[T](s: openArray[T], f: proc(a, b: T): T): T =
   ## Iterator which yields accumulated results of binary function `f`.
   ##
   ## The result of `f` must be of the same type as members of `s`.
-  ## The first yielded value is the first membur of `s`.
+  ## The first yielded value is the first member of `s`.
   runnableExamples:
     let
       a = @[1, 3, 7, 5, 4]
@@ -277,6 +280,72 @@ iterator filterFalse*[T](s: openArray[T], f: proc(a: T): bool): T =
       yield x
 
 
+iterator groupBy*[T](s: openArray[T]): tuple[k: T, v: seq[T]] =
+  ## Iterator which groups the same elements together, yielding a tuple
+  ## `(key, group)`.
+  runnableExamples:
+    let
+      a = @[1, 2, 5, 2, 7, 5, 1, 2]
+      b = ['a', 'b', 'b', 'a', 'b', 'a', 'n', 'd']
+    var s1: seq[tuple[k: int, v: seq[int]]] = @[]
+    var s2: seq[tuple[k: char, v: seq[char]]] = @[]
+
+    for x in groupBy(a):
+      s1.add(x)
+    for x in groupBy(b):
+      s2.add(x)
+    doAssert s1 == @[(k: 1, v: @[1, 1]), (k: 2, v: @[2, 2, 2]),
+                     (k: 5, v: @[5, 5]), (k: 7, v: @[7])]
+    doAssert s2 == @[(k: 'a', v: @['a', 'a', 'a']), (k: 'b', v: @['b', 'b', 'b']),
+                     (k: 'd', v: @['d']), (k: 'n', v: @['n'])]
+
+  var t = initTable[T, seq[T]]()
+  for x in s:
+    if not t.hasKey(x):
+      t[x] = @[]
+    t[x].add(x)
+  for x in t.pairs:
+    yield x
+
+
+iterator groupBy*[T, U](s: openArray[T], f: proc(a: T): U): tuple[k: U, v: seq[T]] =
+  ## Iterator which groupse the elements based on applying a procedure `f`
+  ## on each element, yielding a tuple `(key, group)`.
+  runnableExamples:
+    let
+      a = @[1, 2, 5, 2, 7, 5, 1, 2]
+      b = ['a', 'b', 'b', 'a', 'b', 'a', 'n', 'd']
+      c = ["ac", "dc", "who", "cream", "clash"]
+    proc isOdd(x: int): bool = x mod 2 == 1
+    proc isA(x: char): bool = x == 'a'
+    proc length(x: string): int = x.len
+
+    var s1: seq[tuple[k: bool, v: seq[int]]] = @[]
+    var s2: seq[tuple[k: bool, v: seq[char]]] = @[]
+    var s3: seq[tuple[k: int, v: seq[string]]] = @[]
+
+    for x in groupBy(a, isOdd):
+      s1.add(x)
+    for x in groupBy(b, isA):
+      s2.add(x)
+    for x in groupBy(c, length):
+      s3.add(x)
+    doAssert s1 == @[(k: true, v: @[1, 5, 7, 5, 1]), (k: false, v: @[2, 2, 2])]
+    doAssert s2 == @[(k: true, v: @['a', 'a', 'a']),
+                     (k: false, v: @['b', 'b', 'b', 'n', 'd'])]
+    doAssert s3 == @[(k: 2, v: @["ac", "dc"]), (k: 3, v: @["who"]),
+                     (k: 5, v: @["cream", "clash"])]
+
+  var t = initTable[U, seq[T]]()
+  for x in s:
+    let fx = f(x)
+    if not t.hasKey(fx):
+      t[fx] = @[]
+    t[fx].add(x)
+  for x in t.pairs:
+    yield x
+
+
 iterator islice*[T](s: openArray[T], start = 0, stop = -1, step = 1): T =
   ## Iterator which yields elements of `s`, starting from `start` (default = 0),
   ## until `stop` (default = -1, go to the end), with step-size `step`
@@ -356,5 +425,6 @@ when isMainModule:
   for _ in compress(@[1, 2], @[false, true]): break
   for _ in dropWhile(@[1, 2], proc(a: int): bool = a < 0): break
   for _ in filterFalse(@[1, 2], proc(a: int): bool = a < 0): break
+  for _ in groupBy(@[1, 2], proc(x: int): bool = x mod 2 == 0): break
   for _ in islice(@[1, 2, 3], 2): break
   for _ in takeWhile(@[1, 2], proc(a: int): bool = a < 2): break
