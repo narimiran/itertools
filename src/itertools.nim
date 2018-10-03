@@ -382,6 +382,49 @@ iterator islice*[T](s: openArray[T], start = 0, stop = -1, step = 1): T =
     i += step
 
 
+iterator product*[T](s: openArray[seq[T]]): seq[T] =
+  ## Iterator which yields the Cartesian product of the sequences of `s`
+  ##
+  ## ::
+  ##     product([@["A","B","C"], @["x","y"]]) --> Ax Ay Bx By Cx Cy
+  ##
+  ## Currently, each sequence must contain the same type (i.e. all strings or all ints)
+  runnableExamples:
+    let
+      a = @["A", "B"]
+      b = @["x", "y"]
+    var
+      s1: seq[seq[string]] = @[]
+    
+    for x in product([a, b]):
+      s1.add(x)
+    doAssert s1 == @[@["A", "x"], @["A", "y"],
+                     @["B", "x"], @["B", "y"]] 
+  
+  var
+    counters: seq[int]
+    done = false
+  for channel in s:
+    counters.add(0)
+  
+  while not done:
+    var ret: seq[T]
+    for i, counter in counters:
+      ret.add(s[i][counter])
+    yield ret
+    var i = counters.len - 1
+    while true:
+      inc(counters[i])
+      if counters[i] >= s[i].len:
+        counters[i] = 0
+        dec(i)
+      else:
+        break
+      if i < 0:
+        done = true
+        break
+    
+
 iterator takeWhile*[T](s: openArray[T], f: proc(a: T): bool): T =
   ## Iterator which yields elements of `s` as long as predicate is true.
   runnableExamples:
@@ -413,7 +456,6 @@ iterator takeWhile*[T](s: openArray[T], f: proc(a: T): bool): T =
       break
 
 
-
 when isMainModule:
   # needed to run the tests in `runnableExamples`
   discard count(3)()
@@ -427,4 +469,5 @@ when isMainModule:
   for _ in filterFalse(@[1, 2], proc(a: int): bool = a < 0): break
   for _ in groupBy(@[1, 2], proc(x: int): bool = x mod 2 == 0): break
   for _ in islice(@[1, 2, 3], 2): break
+  for _ in product([@[1, 2], @[3, 4]]): break
   for _ in takeWhile(@[1, 2], proc(a: int): bool = a < 2): break
