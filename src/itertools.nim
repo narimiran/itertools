@@ -413,6 +413,74 @@ iterator takeWhile*[T](s: openArray[T], f: proc(a: T): bool): T =
       break
 
 
+iterator product*[T, U](s1: openArray[T], s2: openArray[U]): tuple[a: T, b: U] =
+  ## Iterator producing tuples with Cartesian product of the arguments.
+  ## Equivalent to nested for-loops.
+  runnableExamples:
+    let
+      a = @[1, 2, 3]
+      b = "ab"
+    var s: seq[tuple[a: int, b: char]]
+
+    for x in product(a, b):
+      s.add(x)
+    doAssert s == @[(a: 1, b: 'a'), (a: 1, b: 'b'), (a: 2, b: 'a'),
+                    (a: 2, b: 'b'), (a: 3, b: 'a'), (a: 3, b: 'b')]
+
+  for a in s1:
+    for b in s2:
+      yield (a, b)
+
+
+iterator product*[T, U, V](s1: openArray[T], s2: openArray[U], s3: openArray[V]):
+  tuple[a: T, b: U, c: V] =
+  ## Iterator producing tuples with Cartesian product of the arguments.
+  ## Equivalent to nested for-loops.
+  runnableExamples:
+    let
+      a = @[1, 2]
+      b = "ab"
+      c = [9.9, 7.2]
+    var s: seq[tuple[a: int, b: char, c: float]]
+
+    for x in product(a, b, c):
+      s.add(x)
+    doAssert s == @[(a: 1, b: 'a', c: 9.9), (a: 1, b: 'a', c: 7.2),
+                    (a: 1, b: 'b', c: 9.9), (a: 1, b: 'b', c: 7.2),
+                    (a: 2, b: 'a', c: 9.9), (a: 2, b: 'a', c: 7.2),
+                    (a: 2, b: 'b', c: 9.9), (a: 2, b: 'b', c: 7.2)]
+
+  for a in s1:
+    for b in s2:
+      for c in s3:
+        yield (a, b, c)
+
+
+iterator product*[T, U, V, W](s1: openArray[T], s2: openArray[U], s3: openArray[V],
+  s4: openArray[W]): tuple[a: T, b: U, c: V, d: W] =
+  ## Iterator producing tuples with Cartesian product of the arguments.
+  ## Equivalent to nested for-loops.
+  runnableExamples:
+    let
+      a = @[1, 2]
+      b = "a"
+      c = [9.9]
+      d = "xyz"
+    var s: seq[tuple[a: int, b: char, c: float, d: char]]
+
+    for x in product(a, b, c, d):
+      s.add(x)
+    doAssert s == @[(a: 1, b: 'a', c: 9.9, d: 'x'), (a: 1, b: 'a', c: 9.9, d: 'y'),
+                    (a: 1, b: 'a', c: 9.9, d: 'z'), (a: 2, b: 'a', c: 9.9, d: 'x'),
+                    (a: 2, b: 'a', c: 9.9, d: 'y'), (a: 2, b: 'a', c: 9.9, d: 'z')]
+
+  for a in s1:
+    for b in s2:
+      for c in s3:
+        for d in s4:
+          yield (a, b, c, d)
+
+
 
 when isMainModule:
   # needed to run the tests in `runnableExamples`
@@ -428,3 +496,6 @@ when isMainModule:
   for _ in groupBy(@[1, 2], proc(x: int): bool = x mod 2 == 0): break
   for _ in islice(@[1, 2, 3], 2): break
   for _ in takeWhile(@[1, 2], proc(a: int): bool = a < 2): break
+  for _ in product(@[1, 2], @[3, 4]): break
+  for _ in product(@[1, 2], @[3, 4], @[5, 6]): break
+  for _ in product(@[1, 2], @[3, 4], @[5, 6], @[7, 8]): break
