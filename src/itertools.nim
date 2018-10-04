@@ -538,6 +538,75 @@ iterator permutations*[T](s: openArray[T]): seq[T] =
     yield x
 
 
+iterator combinations*(n, r: Positive): seq[int] =
+  ## Iterator which yields combinations of size ``r`` of a range ``0 ..< n``.
+  ##
+  ## Both arguments must be positive numbers.
+  runnableExamples:
+      let
+        a = 5
+        b = 4
+        c = 2
+      var
+        s1: seq[seq[int]] = @[]
+        s2: seq[seq[int]] = @[]
+      for x in combinations(a, b):
+        s1.add(x)
+      for x in combinations(a, c):
+        s2.add(x)
+      doAssert s1 == @[@[0, 1, 2, 3], @[0, 1, 2, 4], @[0, 1, 3, 4],
+                       @[0, 2, 3, 4], @[1, 2, 3, 4]]
+      doAssert s2 == @[@[0, 1], @[0, 2], @[0, 3], @[0, 4],
+                       @[1, 2], @[1, 3], @[1, 4], @[2, 3], @[2, 4], @[3, 4]]
+
+  var
+    x = newSeq[int](r)
+    stack = @[0]
+
+  while stack.len > 0:
+    var
+      i = stack.high
+      v = stack.pop()
+    while v < n:
+      x[i] = v
+      inc v
+      inc i
+      stack.add(v)
+      if i == r:
+        yield x
+        break
+
+
+iterator combinations*[T](s: openArray[T], r: Positive): seq[T] =
+  ## Iterator which yields combinations of ``s`` of length ``r``.
+  ##
+  ## Length ``r`` must be a positive number.
+  runnableExamples:
+      let
+        a = "98765"
+        b = 4
+        c = 2
+      var
+        s1: seq[seq[char]] = @[]
+        s2: seq[seq[char]] = @[]
+      for x in combinations(a, b):
+        s1.add(x)
+      for x in combinations(a, c):
+        s2.add(x)
+      doAssert s1 == @[@['9', '8', '7', '6'], @['9', '8', '7', '5'],
+                       @['9', '8', '6', '5'], @['9', '7', '6', '5'],
+                       @['8', '7', '6', '5']]
+      doAssert s2 == @[@['9', '8'], @['9', '7'], @['9', '6'], @['9', '5'],
+                       @['8', '7'], @['8', '6'], @['8', '5'], @['7', '6'],
+                       @['7', '5'], @['6', '5']]
+
+  var x = newSeq[T](r)
+  for indComb in combinations(s.len, r):
+    for i in 0 ..< r:
+      x[i] = s[indComb[i]]
+    yield x
+
+
 
 when isMainModule:
   # needed to run the tests in ``runnableExamples``
@@ -558,3 +627,5 @@ when isMainModule:
   for _ in product(@[1, 2], @[3, 4], @[5, 6], @[7, 8]): break
   for _ in distinctPermutations(@[1, 2, 3]): break
   for _ in permutations(@[1, 2, 3]): break
+  for _ in combinations(5, 2): break
+  for _ in combinations(@[1, 2, 3], 2): break
