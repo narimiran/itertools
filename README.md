@@ -37,6 +37,13 @@ Required Nim version is at least 0.18.0.
     * islice
     * takeWhile
 
+* combinatoric iterators:
+    * product
+    * distinctPermutations
+    * permutations
+    * combinations
+
+
 &nbsp;
 
 
@@ -136,6 +143,43 @@ for i in chain(@[1, 3, 5], @[2, 4, 6], @[7, 8, 9]):
 ```
 
 
+
+
+### Combinatoric iterators
+
+```nim
+import itertools
+import strutils # to join seq[char] into a string
+
+
+let # you can use: sequences, arrays, strings
+  numbers = @[1, 3, 7, 8, 4]
+  constants = [2.7183, 3.1416]
+  word = "abba"
+
+
+for i in product(numbers, constants):
+  echo i
+# (a: 1, b: 2.7183); (a: 1, b: 3.1416); (a: 3, b: 2.7183); (a: 3, b: 3.1416); (a: 7, b: 2.7183); (a: 7, b: 3.1416); (a: 8, b: 2.7183); (a: 8, b: 3.1416); (a: 4, b: 2.7183); (a: 4, b: 3.1416)
+
+for i in distinctPermutations(word):
+  echo i.join
+# aabb; abab; abba; baab; baba; bbaa
+
+for i in permutations(word):
+  echo i.join
+# abba; abab; abba; abab; aabb; aabb; baba; baab; bbaa; bbaa; baab; baba; baba; baab; bbaa; bbaa; baab; baba; aabb; aabb; abab; abba; abab; abba
+
+for i in combinations(5, 3):
+  echo i
+# @[0, 1, 2]; @[0, 1, 3]; @[0, 1, 4]; @[0, 2, 3]; @[0, 2, 4]; @[0, 3, 4]; @[1, 2, 3]; @[1, 2, 4]; @[1, 3, 4]; @[2, 3, 4]
+
+for i in combinations(numbers, 2):
+  echo i
+# @[1, 3]; @[1, 7]; @[1, 8]; @[1, 4]; @[3, 7]; @[3, 8]; @[3, 4]; @[7, 8]; @[7, 4]; @[8, 4]
+```
+
+
 &nbsp;
 
 
@@ -147,6 +191,7 @@ There is probably a lot of room for improvement.
 Feel free to fork the repo and submit your PRs.
 
 Before submitting, run `nim doc -o:./docs/index.html ./src/itertools.nim` to make sure that all the asserts in `runnableExamples` are passing.
+
 
 &nbsp;
 
