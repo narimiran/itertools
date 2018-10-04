@@ -57,7 +57,7 @@ body {
   line-height: 20px;
   color: #444;
   letter-spacing: 0.15px;
-  background-color: #FDFBFA; }
+  background-color: rgba(252, 248, 244, 0.45); }
 
 /* Skeleton grid */
 .container {
@@ -192,10 +192,10 @@ dd > pre {
   table-layout: fixed; }
 
 /* Nim search input */
-div#searchInputDiv {
+div#searchInput {
   margin-bottom: 8px;
 }
-div#searchInputDiv input#searchInput {
+div#searchInput input#searchInput {
   width: 10em;
 }
 div.search-groupby {
@@ -1143,7 +1143,7 @@ dt pre > span.Identifier ~ span.Identifier, dt pre > span.Operator ~ span.Identi
   color: inherit;
   font-weight: inherit; }
 
-dt pre > span.Operator ~ span.Identifier {
+dt pre > span.Operator ~ span.Identifier, dt pre > span.Operator ~ span.Operator {
   color: inherit;
   font-weight: inherit; }
 
@@ -1158,6 +1158,15 @@ dt pre > span.Operator ~ span.Identifier {
   background-repeat: no-repeat;
   background-image: url("data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AAAAAAUAAAAF////AP///wD///8A////AP///wD///8A////AP///wD///8A////AAAAAAIAAABbAAAAlQAAAKIAAACbAAAAmwAAAKIAAACVAAAAWwAAAAL///8A////AP///wD///8A////AAAAABQAAADAAAAAYwAAAA3///8A////AP///wD///8AAAAADQAAAGMAAADAAAAAFP///wD///8A////AP///wAAAACdAAAAOv///wD///8A////AP///wD///8A////AP///wD///8AAAAAOgAAAJ3///8A////AP///wAAAAAnAAAAcP///wAAAAAoAAAASv///wD///8A////AP///wAAAABKAAAAKP///wAAAABwAAAAJ////wD///8AAAAAgQAAABwAAACIAAAAkAAAAJMAAACtAAAAFQAAABUAAACtAAAAkwAAAJAAAACIAAAAHAAAAIH///8A////AAAAAKQAAACrAAAAaP///wD///8AAAAARQAAANIAAADSAAAARf///wD///8AAAAAaAAAAKsAAACk////AAAAADMAAACcAAAAnQAAABj///8A////AP///wAAAAAYAAAAGP///wD///8A////AAAAABgAAACdAAAAnAAAADMAAAB1AAAAwwAAAP8AAADpAAAAsQAAAE4AAAAb////AP///wAAAAAbAAAATgAAALEAAADpAAAA/wAAAMMAAAB1AAAAtwAAAOkAAAD/AAAA/wAAAP8AAADvAAAA3gAAAN4AAADeAAAA3gAAAO8AAAD/AAAA/wAAAP8AAADpAAAAtwAAAGUAAAA/AAAA3wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAADfAAAAPwAAAGX///8A////AAAAAEgAAADtAAAAvwAAAL0AAADGAAAA7wAAAO8AAADGAAAAvQAAAL8AAADtAAAASP///wD///8A////AP///wD///8AAAAAO////wD///8A////AAAAAIcAAACH////AP///wD///8AAAAAO////wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A//8AAP//AAD4HwAA7/cAAN/7AAD//wAAoYUAAJ55AACf+QAAh+EAAAAAAADAAwAA4AcAAP5/AAD//wAA//8AAA==");
   margin-bottom: -5px; }
+div.pragma {
+  display: none;
+}
+span.pragmabegin {
+  cursor: pointer;
+}
+span.pragmaend {
+  cursor: pointer;
+}
 
 div.search_results {
   background-color: antiquewhite;
@@ -1170,47 +1179,32 @@ div#global-links ul {
   margin-left: 0;
   list-style-type: none;
 }
-
-span.pragmadots {
-  /* Position: relative frees us up to make the dots
-  look really nice without fucking up the layout and
-  causing bulging in the parent container */
-  position: relative;
-  /* 1px down looks slightly nicer */
-  top: 1px;
-
-  padding: 2px;
-  background-color: #D3D3D3;
-  border-radius: 4px;
-  margin: 0 2px;
-  cursor: pointer;
-
-  /* For some reason on Chrome, making the font size
-  smaller than 1em is causing the parent container to
-  bulge slightly. So, we're stuck with inheriting 1em,
-  which is sad, because 0.8em looks better... */
-}
-span.pragmadots:hover {
-  background-color: #DBDBDB;
-}
-span.pragmawrap {
-  display: none;
-}
-
 </style>
 
 <script type="text/javascript" src="../dochack.js"></script>
 
 <script type="text/javascript">
+function togglepragma(d) {
+  if (d.style.display != 'inline')
+    d.style.display = 'inline';
+  else
+    d.style.display = 'none';
+}
+
 function main() {
-  var pragmaDots = document.getElementsByClassName("pragmadots");
-  for (var i = 0; i < pragmaDots.length; i++) {
-    pragmaDots[i].onclick = function(event) {
-      // Hide tease
-      event.target.parentNode.style.display = "none";
-      // Show actual
-      event.target.parentNode.nextElementSibling.style.display = "inline";
-    }
+  var elements = document.getElementsByClassName("pragmabegin");
+  for (var i = 0; i < elements.length; ++i) {
+    var e = elements[i];
+    e.onclick = function(event) {
+      togglepragma(event.target.nextSibling);
+    };
+  }
+  var elements = document.getElementsByClassName("pragmaend");
+  for (var i = 0; i < elements.length; ++i) {
+    var e = elements[i];
+    e.onclick = function(event) {
+      togglepragma(event.target.previousSibling);
+    };
   }
 }
 </script>
@@ -1226,7 +1220,7 @@ function main() {
     <ul class="simple">
     </ul>
   </div>
-  <div id="searchInputDiv">
+  <div id="searchInput">
     Search: <input type="text" id="searchInput"
       onkeyup="search()" />
   </div>
@@ -1287,6 +1281,10 @@ function main() {
   <li><a class="reference" href="#product.i,openArray[T],openArray[U],openArray[V],openArray[W]"
     title="product[T, U, V, W](s1: openArray[T]; s2: openArray[U]; s3: openArray[V];
                  s4: openArray[W]): tuple[a: T, b: U, c: V, d: W]"><wbr />product<span class="attachedType" style="visibility:hidden"></span></a></li>
+  <li><a class="reference" href="#distinctPermutations.i,openArray[T]"
+    title="distinctPermutations[T](s: openArray[T]): seq[T]"><wbr />distinct<wbr />Permutations<span class="attachedType" style="visibility:hidden"></span></a></li>
+  <li><a class="reference" href="#permutations.i,openArray[T]"
+    title="permutations[T](s: openArray[T]): seq[T]"><wbr />permutations<span class="attachedType" style="visibility:hidden"></span></a></li>
 
   </ul>
 </li>
@@ -1300,17 +1298,17 @@ function main() {
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="tables.html">tables</a>
+<a class="reference external" href="algorithm.html">algorithm</a>, <a class="reference external" href="tables.html">tables</a>
 </dl></div>
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
 <dt id="count"><a name="count,SomeNumber"></a><pre><span class="Keyword">proc</span> <span class="Identifier">count</span><span class="Other">(</span><span class="Identifier">start</span><span class="Other">:</span> <span class="Identifier">SomeNumber</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">SomeNumber</span></pre></dt>
 <dd>
-<p>Infinite iterator, counts from a <cite>start</cite> to infinity.</p>
-<p><cite>start</cite> needs to be either int of float. If you need to have a step different than 1, use <cite>count(start, step)</cite>.</p>
+<p>Infinite iterator, counts from a <tt class="docutils literal"><span class="pre">start</span></tt> to infinity.</p>
+<p><tt class="docutils literal"><span class="pre">start</span></tt> needs to be either int of float. If you need to have a step different than 1, use <tt class="docutils literal"><span class="pre">count(start, step)</span></tt>.</p>
 
-<p><strong class="examples_text">Examples:</strong></p>
+<strong class="examples_text">Examples:</strong>
 <pre class="listing"><span class="Keyword">let</span>
   <span class="Identifier">fromFive</span> <span class="Other">=</span> <span class="Identifier">count</span><span class="Other">(</span><span class="DecNumber">5</span><span class="Other">)</span>
   <span class="Identifier">fromNineNine</span> <span class="Other">=</span> <span class="Identifier">count</span><span class="Other">(</span><span class="FloatNumber">9.9</span><span class="Other">)</span>
@@ -1328,10 +1326,10 @@ function main() {
 </dd>
 <dt id="count"><a name="count,SomeNumber,SomeNumber"></a><pre><span class="Keyword">proc</span> <span class="Identifier">count</span><span class="Other">(</span><span class="Identifier">start</span><span class="Other">,</span> <span class="Identifier">step</span><span class="Other">:</span> <span class="Identifier">SomeNumber</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">SomeNumber</span></pre></dt>
 <dd>
-<p>Infinite iterator, counts from a <cite>start</cite> to infinity with a <cite>step</cite> step-size.</p>
-<p><cite>start</cite> and <cite>step</cite> need to be of the same type, either int of float. If your step is 1, you can use <cite>count(start)</cite>.</p>
+<p>Infinite iterator, counts from a <tt class="docutils literal"><span class="pre">start</span></tt> to infinity with a <tt class="docutils literal"><span class="pre">step</span></tt> step-size.</p>
+<p><tt class="docutils literal"><span class="pre">start</span></tt> and <tt class="docutils literal"><span class="pre">step</span></tt> need to be of the same type, either int of float. If your step is 1, you can use <tt class="docutils literal"><span class="pre">count(start)</span></tt>.</p>
 
-<p><strong class="examples_text">Examples:</strong></p>
+<strong class="examples_text">Examples:</strong>
 <pre class="listing"><span class="Keyword">let</span>
   <span class="Identifier">fromFive</span> <span class="Other">=</span> <span class="Identifier">count</span><span class="Other">(</span><span class="DecNumber">5</span><span class="Other">,</span> <span class="DecNumber">2</span><span class="Other">)</span>
   <span class="Identifier">fromNine</span> <span class="Other">=</span> <span class="Identifier">count</span><span class="Other">(</span><span class="FloatNumber">9.5</span><span class="Other">,</span> <span class="FloatNumber">1.5</span><span class="Other">)</span>
@@ -1350,7 +1348,7 @@ function main() {
 <dt id="cycle"><a name="cycle,openArray[T]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">cycle</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
 <dd>
 Infinite iterator, cycles through the members of a sequence -- when it gets to the end of it, it starts again from the beginning.
-<p><strong class="examples_text">Examples:</strong></p>
+<strong class="examples_text">Examples:</strong>
 <pre class="listing"><span class="Keyword">let</span>
   <span class="Identifier">a</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="DecNumber">1</span><span class="Other">,</span> <span class="DecNumber">3</span><span class="Other">,</span> <span class="DecNumber">9</span><span class="Other">,</span> <span class="DecNumber">5</span><span class="Other">]</span>
   <span class="Identifier">b</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="FloatNumber">2.0</span><span class="Other">,</span> <span class="FloatNumber">7.5</span><span class="Other">,</span> <span class="FloatNumber">11.3</span><span class="Other">]</span>
@@ -1382,10 +1380,10 @@ Infinite iterator, cycles through the members of a sequence -- when it gets to t
 </dd>
 <dt id="repeat"><a name="repeat,T,int"></a><pre><span class="Keyword">proc</span> <span class="Identifier">repeat</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">x</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">;</span> <span class="Identifier">times</span> <span class="Other">=</span> <span class="DecNumber">0</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">iterator</span> <span class="Other">(</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
 <dd>
-<p>Infinite iterator which yields an object <cite>x</cite> infinite numer of times if <cite>times</cite> is not specified.</p>
-<p>If <cite>times</cite> is specified, it runs <cite>times</cite> number of times.</p>
+<p>Infinite iterator which yields an object <tt class="docutils literal"><span class="pre">x</span></tt> infinite numer of times if <tt class="docutils literal"><span class="pre">times</span></tt> is not specified.</p>
+<p>If <tt class="docutils literal"><span class="pre">times</span></tt> is specified, it runs <tt class="docutils literal"><span class="pre">times</span></tt> number of times.</p>
 
-<p><strong class="examples_text">Examples:</strong></p>
+<strong class="examples_text">Examples:</strong>
 <pre class="listing"><span class="Keyword">let</span>
   <span class="Identifier">a</span> <span class="Other">=</span> <span class="DecNumber">3</span>
   <span class="Identifier">b</span> <span class="Other">=</span> <span class="FloatNumber">2.7</span>
@@ -1424,10 +1422,10 @@ Infinite iterator, cycles through the members of a sequence -- when it gets to t
 <dl class="item">
 <dt id="accumulate"><a name="accumulate.i,openArray[T],proc(T,T)"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">accumulate</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">f</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
 <dd>
-<p>Iterator which yields accumulated results of binary function <cite>f</cite>.</p>
-<p>The result of <cite>f</cite> must be of the same type as members of <cite>s</cite>. The first yielded value is the first member of <cite>s</cite>.</p>
+<p>Iterator which yields accumulated results of binary function <tt class="docutils literal"><span class="pre">f</span></tt>.</p>
+<p>The result of <tt class="docutils literal"><span class="pre">f</span></tt> must be of the same type as members of <tt class="docutils literal"><span class="pre">s</span></tt>. The first yielded value is the first member of <tt class="docutils literal"><span class="pre">s</span></tt>.</p>
 
-<p><strong class="examples_text">Examples:</strong></p>
+<strong class="examples_text">Examples:</strong>
 <pre class="listing"><span class="Keyword">let</span>
   <span class="Identifier">a</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="DecNumber">1</span><span class="Other">,</span> <span class="DecNumber">3</span><span class="Other">,</span> <span class="DecNumber">7</span><span class="Other">,</span> <span class="DecNumber">5</span><span class="Other">,</span> <span class="DecNumber">4</span><span class="Other">]</span>
   <span class="Identifier">b</span> <span class="Other">=</span> <span class="Other">[</span><span class="FloatNumber">1.0</span><span class="Other">,</span> <span class="FloatNumber">2.5</span><span class="Other">,</span> <span class="DecNumber">6</span><span class="Other">,</span> <span class="DecNumber">4</span><span class="Other">,</span> <span class="DecNumber">5</span><span class="Other">]</span>
@@ -1453,7 +1451,7 @@ Infinite iterator, cycles through the members of a sequence -- when it gets to t
 <dt id="chain"><a name="chain.i,varargs[seq[T]]"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">chain</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">xs</span><span class="Other">:</span> <span class="Identifier">varargs</span><span class="Other">[</span><span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
 <dd>
 Iterator which yields elements of each passed sequence.
-<p><strong class="examples_text">Examples:</strong></p>
+<strong class="examples_text">Examples:</strong>
 <pre class="listing"><span class="Keyword">let</span>
   <span class="Identifier">a</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="DecNumber">1</span><span class="Other">,</span> <span class="DecNumber">5</span><span class="Other">,</span> <span class="DecNumber">4</span><span class="Other">]</span>
   <span class="Identifier">b</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="DecNumber">9</span><span class="Other">,</span> <span class="DecNumber">8</span><span class="Other">,</span> <span class="DecNumber">7</span><span class="Other">]</span>
@@ -1478,10 +1476,10 @@ Iterator which yields elements of each passed sequence.
 </dd>
 <dt id="compress"><a name="compress.i,openArray[T],openArray[bool]"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">compress</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">bool</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
 <dd>
-<p>Iterator which yields only those elements of a sequence <cite>s</cite> for which the element of a selector <cite>b</cite> is <cite>true</cite>.</p>
-<p>Stops as soon as either <cite>s</cite> or <cite>b</cite> are exhausted.</p>
+<p>Iterator which yields only those elements of a sequence <tt class="docutils literal"><span class="pre">s</span></tt> for which the element of a selector <tt class="docutils literal"><span class="pre">b</span></tt> is <tt class="docutils literal"><span class="pre">true</span></tt>.</p>
+<p>Stops as soon as either <tt class="docutils literal"><span class="pre">s</span></tt> or <tt class="docutils literal"><span class="pre">b</span></tt> are exhausted.</p>
 
-<p><strong class="examples_text">Examples:</strong></p>
+<strong class="examples_text">Examples:</strong>
 <pre class="listing"><span class="Keyword">let</span>
   <span class="Identifier">a</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="DecNumber">1</span><span class="Other">,</span> <span class="DecNumber">2</span><span class="Other">,</span> <span class="DecNumber">3</span><span class="Other">,</span> <span class="DecNumber">4</span><span class="Other">,</span> <span class="DecNumber">5</span><span class="Other">,</span> <span class="DecNumber">6</span><span class="Other">,</span> <span class="DecNumber">7</span><span class="Other">,</span> <span class="DecNumber">8</span><span class="Other">,</span> <span class="DecNumber">9</span><span class="Other">]</span>
   <span class="Identifier">b</span> <span class="Other">=</span> <span class="Other">[</span><span class="FloatNumber">9.5</span><span class="Other">,</span> <span class="FloatNumber">8.1</span><span class="Other">,</span> <span class="FloatNumber">7.3</span><span class="Other">]</span>
@@ -1507,8 +1505,8 @@ Iterator which yields elements of each passed sequence.
 </dd>
 <dt id="dropWhile"><a name="dropWhile.i,openArray[T],proc(T)"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">dropWhile</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">f</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
 <dd>
-Iterator which drops the elements from a sequence <cite>s</cite> as long as the predicate is <cite>true</cite>. Afterwards, it returns every element.
-<p><strong class="examples_text">Examples:</strong></p>
+Iterator which drops the elements from a sequence <tt class="docutils literal"><span class="pre">s</span></tt> as long as the predicate is <tt class="docutils literal"><span class="pre">true</span></tt>. Afterwards, it returns every element.
+<strong class="examples_text">Examples:</strong>
 <pre class="listing"><span class="Keyword">let</span>
   <span class="Identifier">a</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="DecNumber">1</span><span class="Other">,</span> <span class="DecNumber">3</span><span class="Other">,</span> <span class="DecNumber">7</span><span class="Other">,</span> <span class="DecNumber">2</span><span class="Other">,</span> <span class="DecNumber">1</span><span class="Other">,</span> <span class="DecNumber">4</span><span class="Other">]</span>
   <span class="Identifier">b</span> <span class="Other">=</span> <span class="Other">[</span><span class="CharLit">'a'</span><span class="Other">,</span> <span class="CharLit">'d'</span><span class="Other">,</span> <span class="CharLit">'h'</span><span class="Other">,</span> <span class="CharLit">'d'</span><span class="Other">]</span>
@@ -1542,8 +1540,8 @@ Iterator which drops the elements from a sequence <cite>s</cite> as long as the 
 </dd>
 <dt id="filterFalse"><a name="filterFalse.i,openArray[T],proc(T)"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">filterFalse</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">f</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
 <dd>
-Iterator which filters the container <cite>s</cite> and yields only the elements for which <cite>f</cite> is false.
-<p><strong class="examples_text">Examples:</strong></p>
+Iterator which filters the container <tt class="docutils literal"><span class="pre">s</span></tt> and yields only the elements for which <tt class="docutils literal"><span class="pre">f</span></tt> is false.
+<strong class="examples_text">Examples:</strong>
 <pre class="listing"><span class="Keyword">let</span>
   <span class="Identifier">a</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="DecNumber">1</span><span class="Other">,</span> <span class="DecNumber">3</span><span class="Other">,</span> <span class="DecNumber">7</span><span class="Other">,</span> <span class="DecNumber">2</span><span class="Other">,</span> <span class="DecNumber">1</span><span class="Other">,</span> <span class="DecNumber">4</span><span class="Other">]</span>
   <span class="Identifier">b</span> <span class="Other">=</span> <span class="Other">[</span><span class="CharLit">'a'</span><span class="Other">,</span> <span class="CharLit">'d'</span><span class="Other">,</span> <span class="CharLit">'h'</span><span class="Other">,</span> <span class="CharLit">'d'</span><span class="Other">]</span>
@@ -1577,8 +1575,8 @@ Iterator which filters the container <cite>s</cite> and yields only the elements
 </dd>
 <dt id="groupBy"><a name="groupBy.i,openArray[T]"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">groupBy</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">,</span> <span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">]</span></pre></dt>
 <dd>
-Iterator which groups the same elements together, yielding a tuple <cite>(key, group)</cite>.
-<p><strong class="examples_text">Examples:</strong></p>
+Iterator which groups the same elements together, yielding a tuple <tt class="docutils literal"><span class="pre">(key, group)</span></tt>.
+<strong class="examples_text">Examples:</strong>
 <pre class="listing"><span class="Keyword">let</span>
   <span class="Identifier">a</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="DecNumber">1</span><span class="Other">,</span> <span class="DecNumber">2</span><span class="Other">,</span> <span class="DecNumber">5</span><span class="Other">,</span> <span class="DecNumber">2</span><span class="Other">,</span> <span class="DecNumber">7</span><span class="Other">,</span> <span class="DecNumber">5</span><span class="Other">,</span> <span class="DecNumber">1</span><span class="Other">,</span> <span class="DecNumber">2</span><span class="Other">]</span>
   <span class="Identifier">b</span> <span class="Other">=</span> <span class="Other">[</span><span class="CharLit">'a'</span><span class="Other">,</span> <span class="CharLit">'b'</span><span class="Other">,</span> <span class="CharLit">'b'</span><span class="Other">,</span> <span class="CharLit">'a'</span><span class="Other">,</span> <span class="CharLit">'b'</span><span class="Other">,</span> <span class="CharLit">'a'</span><span class="Other">,</span> <span class="CharLit">'n'</span><span class="Other">,</span> <span class="CharLit">'d'</span><span class="Other">]</span>
@@ -1597,8 +1595,8 @@ Iterator which groups the same elements together, yielding a tuple <cite>(key, g
 </dd>
 <dt id="groupBy"><a name="groupBy.i,openArray[T],proc(T)"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">groupBy</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">,</span> <span class="Identifier">U</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">f</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">U</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">U</span><span class="Other">,</span> <span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">]</span></pre></dt>
 <dd>
-Iterator which groupse the elements based on applying a procedure <cite>f</cite> on each element, yielding a tuple <cite>(key, group)</cite>.
-<p><strong class="examples_text">Examples:</strong></p>
+Iterator which groupse the elements based on applying a procedure <tt class="docutils literal"><span class="pre">f</span></tt> on each element, yielding a tuple <tt class="docutils literal"><span class="pre">(key, group)</span></tt>.
+<strong class="examples_text">Examples:</strong>
 <pre class="listing"><span class="Keyword">let</span>
   <span class="Identifier">a</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="DecNumber">1</span><span class="Other">,</span> <span class="DecNumber">2</span><span class="Other">,</span> <span class="DecNumber">5</span><span class="Other">,</span> <span class="DecNumber">2</span><span class="Other">,</span> <span class="DecNumber">7</span><span class="Other">,</span> <span class="DecNumber">5</span><span class="Other">,</span> <span class="DecNumber">1</span><span class="Other">,</span> <span class="DecNumber">2</span><span class="Other">]</span>
   <span class="Identifier">b</span> <span class="Other">=</span> <span class="Other">[</span><span class="CharLit">'a'</span><span class="Other">,</span> <span class="CharLit">'b'</span><span class="Other">,</span> <span class="CharLit">'b'</span><span class="Other">,</span> <span class="CharLit">'a'</span><span class="Other">,</span> <span class="CharLit">'b'</span><span class="Other">,</span> <span class="CharLit">'a'</span><span class="Other">,</span> <span class="CharLit">'n'</span><span class="Other">,</span> <span class="CharLit">'d'</span><span class="Other">]</span>
@@ -1631,11 +1629,10 @@ Iterator which groupse the elements based on applying a procedure <cite>f</cite>
     <span class="Operator">@</span><span class="Other">[</span><span class="Other">(</span><span class="Identifier">k</span><span class="Other">:</span> <span class="DecNumber">2</span><span class="Other">,</span> <span class="Identifier">v</span><span class="Other">:</span> <span class="Operator">@</span><span class="Other">[</span><span class="StringLit">&quot;ac&quot;</span><span class="Other">,</span> <span class="StringLit">&quot;dc&quot;</span><span class="Other">]</span><span class="Other">)</span><span class="Other">,</span> <span class="Other">(</span><span class="Identifier">k</span><span class="Other">:</span> <span class="DecNumber">3</span><span class="Other">,</span> <span class="Identifier">v</span><span class="Other">:</span> <span class="Operator">@</span><span class="Other">[</span><span class="StringLit">&quot;who&quot;</span><span class="Other">]</span><span class="Other">)</span><span class="Other">,</span> <span class="Other">(</span><span class="Identifier">k</span><span class="Other">:</span> <span class="DecNumber">5</span><span class="Other">,</span> <span class="Identifier">v</span><span class="Other">:</span> <span class="Operator">@</span><span class="Other">[</span><span class="StringLit">&quot;cream&quot;</span><span class="Other">,</span> <span class="StringLit">&quot;clash&quot;</span><span class="Other">]</span><span class="Other">)</span><span class="Other">]</span></pre>
 
 </dd>
-<dt id="islice"><a name="islice.i,openArray[T],int,int"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">islice</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">start</span> <span class="Other">=</span> <span class="DecNumber">0</span><span class="Other">;</span>
-                  <span class="Identifier">stop</span> <span class="Other">=</span> <span class="Operator">-</span><span class="DecNumber">1</span><span class="Other">;</span> <span class="Identifier">step</span> <span class="Other">=</span> <span class="DecNumber">1</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
+<dt id="islice"><a name="islice.i,openArray[T],int,int"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">islice</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">start</span> <span class="Other">=</span> <span class="DecNumber">0</span><span class="Other">;</span> <span class="Identifier">stop</span> <span class="Other">=</span> <span class="Operator">-</span><span class="DecNumber">1</span><span class="Other">;</span> <span class="Identifier">step</span> <span class="Other">=</span> <span class="DecNumber">1</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
 <dd>
-Iterator which yields elements of <cite>s</cite>, starting from <cite>start</cite> (default = 0), until <cite>stop</cite> (default = -1, go to the end), with step-size <cite>step</cite> (default = 1).
-<p><strong class="examples_text">Examples:</strong></p>
+Iterator which yields elements of <tt class="docutils literal"><span class="pre">s</span></tt>, starting from <tt class="docutils literal"><span class="pre">start</span></tt> (default = 0), until <tt class="docutils literal"><span class="pre">stop</span></tt> (default = -1, go to the end), with step-size <tt class="docutils literal"><span class="pre">step</span></tt> (default = 1).
+<strong class="examples_text">Examples:</strong>
 <pre class="listing"><span class="Keyword">let</span>
   <span class="Identifier">a</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="DecNumber">1</span><span class="Other">,</span> <span class="DecNumber">4</span><span class="Other">,</span> <span class="DecNumber">3</span><span class="Other">,</span> <span class="DecNumber">2</span><span class="Other">,</span> <span class="DecNumber">5</span><span class="Other">,</span> <span class="DecNumber">8</span><span class="Other">,</span> <span class="DecNumber">6</span><span class="Other">,</span> <span class="DecNumber">7</span><span class="Other">,</span> <span class="DecNumber">9</span><span class="Other">]</span>
   <span class="Identifier">b</span> <span class="Other">=</span> <span class="Other">[</span><span class="FloatNumber">3.3</span><span class="Other">,</span> <span class="FloatNumber">4.4</span><span class="Other">,</span> <span class="FloatNumber">9.9</span><span class="Other">,</span> <span class="FloatNumber">6.6</span><span class="Other">,</span> <span class="FloatNumber">2.2</span><span class="Other">]</span>
@@ -1664,8 +1661,8 @@ Iterator which yields elements of <cite>s</cite>, starting from <cite>start</cit
 </dd>
 <dt id="takeWhile"><a name="takeWhile.i,openArray[T],proc(T)"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">takeWhile</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">f</span><span class="Other">:</span> <span class="Keyword">proc</span> <span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
 <dd>
-Iterator which yields elements of <cite>s</cite> as long as predicate is true.
-<p><strong class="examples_text">Examples:</strong></p>
+Iterator which yields elements of <tt class="docutils literal"><span class="pre">s</span></tt> as long as predicate is true.
+<strong class="examples_text">Examples:</strong>
 <pre class="listing"><span class="Keyword">let</span>
   <span class="Identifier">a</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="DecNumber">1</span><span class="Other">,</span> <span class="DecNumber">3</span><span class="Other">,</span> <span class="DecNumber">5</span><span class="Other">,</span> <span class="DecNumber">2</span><span class="Other">,</span> <span class="DecNumber">7</span><span class="Other">,</span> <span class="DecNumber">9</span><span class="Other">]</span>
   <span class="Identifier">b</span> <span class="Other">=</span> <span class="Other">[</span><span class="CharLit">'a'</span><span class="Other">,</span> <span class="CharLit">'c'</span><span class="Other">,</span> <span class="CharLit">'d'</span><span class="Other">,</span> <span class="CharLit">'c'</span><span class="Other">]</span>
@@ -1700,11 +1697,11 @@ Iterator which yields elements of <cite>s</cite> as long as predicate is true.
 <dt id="product"><a name="product.i,openArray[T],openArray[U]"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">product</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">,</span> <span class="Identifier">U</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">s1</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">s2</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">U</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">U</span><span class="Other">]</span></pre></dt>
 <dd>
 Iterator producing tuples with Cartesian product of the arguments. Equivalent to nested for-loops.
-<p><strong class="examples_text">Examples:</strong></p>
+<strong class="examples_text">Examples:</strong>
 <pre class="listing"><span class="Keyword">let</span>
   <span class="Identifier">a</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="DecNumber">1</span><span class="Other">,</span> <span class="DecNumber">2</span><span class="Other">,</span> <span class="DecNumber">3</span><span class="Other">]</span>
   <span class="Identifier">b</span> <span class="Other">=</span> <span class="StringLit">&quot;ab&quot;</span>
-<span class="Keyword">var</span> <span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">char</span><span class="Other">]</span><span class="Other">]</span>
+<span class="Keyword">var</span> <span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">char</span><span class="Other">]</span><span class="Other">]</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="Other">]</span>
 <span class="Keyword">for</span> <span class="Identifier">x</span> <span class="Keyword">in</span> <span class="Identifier">product</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">)</span><span class="Other">:</span>
   <span class="Identifier">s</span><span class="Other">.</span><span class="Identifier">add</span><span class="Other">(</span><span class="Identifier">x</span><span class="Other">)</span>
 <span class="Identifier">doAssert</span> <span class="Identifier">s</span> <span class="Operator">==</span>
@@ -1715,12 +1712,12 @@ Iterator producing tuples with Cartesian product of the arguments. Equivalent to
     <span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">U</span><span class="Other">,</span> <span class="Identifier">c</span><span class="Other">:</span> <span class="Identifier">V</span><span class="Other">]</span></pre></dt>
 <dd>
 Iterator producing tuples with Cartesian product of the arguments. Equivalent to nested for-loops.
-<p><strong class="examples_text">Examples:</strong></p>
+<strong class="examples_text">Examples:</strong>
 <pre class="listing"><span class="Keyword">let</span>
   <span class="Identifier">a</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="DecNumber">1</span><span class="Other">,</span> <span class="DecNumber">2</span><span class="Other">]</span>
   <span class="Identifier">b</span> <span class="Other">=</span> <span class="StringLit">&quot;ab&quot;</span>
   <span class="Identifier">c</span> <span class="Other">=</span> <span class="Other">[</span><span class="FloatNumber">9.9</span><span class="Other">,</span> <span class="FloatNumber">7.2</span><span class="Other">]</span>
-<span class="Keyword">var</span> <span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">char</span><span class="Other">,</span> <span class="Identifier">c</span><span class="Other">:</span> <span class="Identifier">float</span><span class="Other">]</span><span class="Other">]</span>
+<span class="Keyword">var</span> <span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">char</span><span class="Other">,</span> <span class="Identifier">c</span><span class="Other">:</span> <span class="Identifier">float</span><span class="Other">]</span><span class="Other">]</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="Other">]</span>
 <span class="Keyword">for</span> <span class="Identifier">x</span> <span class="Keyword">in</span> <span class="Identifier">product</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">,</span> <span class="Identifier">c</span><span class="Other">)</span><span class="Other">:</span>
   <span class="Identifier">s</span><span class="Other">.</span><span class="Identifier">add</span><span class="Other">(</span><span class="Identifier">x</span><span class="Other">)</span>
 <span class="Identifier">doAssert</span> <span class="Identifier">s</span> <span class="Operator">==</span>
@@ -1733,19 +1730,65 @@ Iterator producing tuples with Cartesian product of the arguments. Equivalent to
                          <span class="Identifier">s4</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">W</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">T</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">U</span><span class="Other">,</span> <span class="Identifier">c</span><span class="Other">:</span> <span class="Identifier">V</span><span class="Other">,</span> <span class="Identifier">d</span><span class="Other">:</span> <span class="Identifier">W</span><span class="Other">]</span></pre></dt>
 <dd>
 Iterator producing tuples with Cartesian product of the arguments. Equivalent to nested for-loops.
-<p><strong class="examples_text">Examples:</strong></p>
+<strong class="examples_text">Examples:</strong>
 <pre class="listing"><span class="Keyword">let</span>
   <span class="Identifier">a</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="DecNumber">1</span><span class="Other">,</span> <span class="DecNumber">2</span><span class="Other">]</span>
   <span class="Identifier">b</span> <span class="Other">=</span> <span class="StringLit">&quot;a&quot;</span>
   <span class="Identifier">c</span> <span class="Other">=</span> <span class="Other">[</span><span class="FloatNumber">9.9</span><span class="Other">]</span>
   <span class="Identifier">d</span> <span class="Other">=</span> <span class="StringLit">&quot;xyz&quot;</span>
-<span class="Keyword">var</span> <span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">char</span><span class="Other">,</span> <span class="Identifier">c</span><span class="Other">:</span> <span class="Identifier">float</span><span class="Other">,</span> <span class="Identifier">d</span><span class="Other">:</span> <span class="Identifier">char</span><span class="Other">]</span><span class="Other">]</span>
+<span class="Keyword">var</span> <span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">char</span><span class="Other">,</span> <span class="Identifier">c</span><span class="Other">:</span> <span class="Identifier">float</span><span class="Other">,</span> <span class="Identifier">d</span><span class="Other">:</span> <span class="Identifier">char</span><span class="Other">]</span><span class="Other">]</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="Other">]</span>
 <span class="Keyword">for</span> <span class="Identifier">x</span> <span class="Keyword">in</span> <span class="Identifier">product</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">,</span> <span class="Identifier">c</span><span class="Other">,</span> <span class="Identifier">d</span><span class="Other">)</span><span class="Other">:</span>
   <span class="Identifier">s</span><span class="Other">.</span><span class="Identifier">add</span><span class="Other">(</span><span class="Identifier">x</span><span class="Other">)</span>
 <span class="Identifier">doAssert</span> <span class="Identifier">s</span> <span class="Operator">==</span>
     <span class="Operator">@</span><span class="Other">[</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="DecNumber">1</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="CharLit">'a'</span><span class="Other">,</span> <span class="Identifier">c</span><span class="Other">:</span> <span class="FloatNumber">9.9</span><span class="Other">,</span> <span class="Identifier">d</span><span class="Other">:</span> <span class="CharLit">'x'</span><span class="Other">)</span><span class="Other">,</span> <span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="DecNumber">1</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="CharLit">'a'</span><span class="Other">,</span> <span class="Identifier">c</span><span class="Other">:</span> <span class="FloatNumber">9.9</span><span class="Other">,</span> <span class="Identifier">d</span><span class="Other">:</span> <span class="CharLit">'y'</span><span class="Other">)</span><span class="Other">,</span>
       <span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="DecNumber">1</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="CharLit">'a'</span><span class="Other">,</span> <span class="Identifier">c</span><span class="Other">:</span> <span class="FloatNumber">9.9</span><span class="Other">,</span> <span class="Identifier">d</span><span class="Other">:</span> <span class="CharLit">'z'</span><span class="Other">)</span><span class="Other">,</span> <span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="DecNumber">2</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="CharLit">'a'</span><span class="Other">,</span> <span class="Identifier">c</span><span class="Other">:</span> <span class="FloatNumber">9.9</span><span class="Other">,</span> <span class="Identifier">d</span><span class="Other">:</span> <span class="CharLit">'x'</span><span class="Other">)</span><span class="Other">,</span>
       <span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="DecNumber">2</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="CharLit">'a'</span><span class="Other">,</span> <span class="Identifier">c</span><span class="Other">:</span> <span class="FloatNumber">9.9</span><span class="Other">,</span> <span class="Identifier">d</span><span class="Other">:</span> <span class="CharLit">'y'</span><span class="Other">)</span><span class="Other">,</span> <span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="DecNumber">2</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="CharLit">'a'</span><span class="Other">,</span> <span class="Identifier">c</span><span class="Other">:</span> <span class="FloatNumber">9.9</span><span class="Other">,</span> <span class="Identifier">d</span><span class="Other">:</span> <span class="CharLit">'z'</span><span class="Other">)</span><span class="Other">]</span></pre>
+
+</dd>
+<dt id="distinctPermutations"><a name="distinctPermutations.i,openArray[T]"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">distinctPermutations</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
+<dd>
+<p>Iterator which yields distinct permutations of <tt class="docutils literal"><span class="pre">s</span></tt>.</p>
+<p>Permutations are yielded in lexicographical order, without duplicates. If you want to include duplicates, use <tt class="docutils literal"><span class="pre">permutations</span></tt>.</p>
+
+<strong class="examples_text">Examples:</strong>
+<pre class="listing"><span class="Keyword">let</span>
+  <span class="Identifier">a</span> <span class="Other">=</span> <span class="StringLit">&quot;bab&quot;</span>
+  <span class="Identifier">b</span> <span class="Other">=</span> <span class="StringLit">&quot;zzz&quot;</span>
+<span class="Keyword">var</span>
+  <span class="Identifier">s1</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span><span class="Other">]</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="Other">]</span>
+  <span class="Identifier">s2</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span><span class="Other">]</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="Other">]</span>
+<span class="Keyword">for</span> <span class="Identifier">x</span> <span class="Keyword">in</span> <span class="Identifier">distinctPermutations</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">)</span><span class="Other">:</span>
+  <span class="Identifier">s1</span><span class="Other">.</span><span class="Identifier">add</span><span class="Other">(</span><span class="Identifier">x</span><span class="Other">)</span>
+<span class="Keyword">for</span> <span class="Identifier">x</span> <span class="Keyword">in</span> <span class="Identifier">distinctPermutations</span><span class="Other">(</span><span class="Identifier">b</span><span class="Other">)</span><span class="Other">:</span>
+  <span class="Identifier">s2</span><span class="Other">.</span><span class="Identifier">add</span><span class="Other">(</span><span class="Identifier">x</span><span class="Other">)</span>
+<span class="Identifier">doAssert</span> <span class="Identifier">s1</span> <span class="Operator">==</span>
+    <span class="Operator">@</span><span class="Other">[</span><span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'a'</span><span class="Other">,</span> <span class="CharLit">'b'</span><span class="Other">,</span> <span class="CharLit">'b'</span><span class="Other">]</span><span class="Other">,</span> <span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'b'</span><span class="Other">,</span> <span class="CharLit">'a'</span><span class="Other">,</span> <span class="CharLit">'b'</span><span class="Other">]</span><span class="Other">,</span> <span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'b'</span><span class="Other">,</span> <span class="CharLit">'b'</span><span class="Other">,</span> <span class="CharLit">'a'</span><span class="Other">]</span><span class="Other">]</span>
+<span class="Identifier">doAssert</span> <span class="Identifier">s2</span> <span class="Operator">==</span>
+    <span class="Operator">@</span><span class="Other">[</span><span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'z'</span><span class="Other">,</span> <span class="CharLit">'z'</span><span class="Other">,</span> <span class="CharLit">'z'</span><span class="Other">]</span><span class="Other">]</span></pre>
+
+</dd>
+<dt id="permutations"><a name="permutations.i,openArray[T]"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">permutations</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
+<dd>
+<p>Iterator which yields all (number of permutations = <tt class="docutils literal"><span class="pre">(s.len)!</span></tt>) permutations of <tt class="docutils literal"><span class="pre">s</span></tt>.</p>
+<p>If <tt class="docutils literal"><span class="pre">s</span></tt> contains duplicate elements, some permutations will be the same. If you want permutations without duplicates, use <tt class="docutils literal"><span class="pre">distinctPermutations</span></tt>.</p>
+
+<strong class="examples_text">Examples:</strong>
+<pre class="listing"><span class="Keyword">let</span>
+  <span class="Identifier">a</span> <span class="Other">=</span> <span class="StringLit">&quot;bab&quot;</span>
+  <span class="Identifier">b</span> <span class="Other">=</span> <span class="StringLit">&quot;zzz&quot;</span>
+<span class="Keyword">var</span>
+  <span class="Identifier">s1</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span><span class="Other">]</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="Other">]</span>
+  <span class="Identifier">s2</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span><span class="Other">]</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="Other">]</span>
+<span class="Keyword">for</span> <span class="Identifier">x</span> <span class="Keyword">in</span> <span class="Identifier">permutations</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">)</span><span class="Other">:</span>
+  <span class="Identifier">s1</span><span class="Other">.</span><span class="Identifier">add</span><span class="Other">(</span><span class="Identifier">x</span><span class="Other">)</span>
+<span class="Keyword">for</span> <span class="Identifier">x</span> <span class="Keyword">in</span> <span class="Identifier">permutations</span><span class="Other">(</span><span class="Identifier">b</span><span class="Other">)</span><span class="Other">:</span>
+  <span class="Identifier">s2</span><span class="Other">.</span><span class="Identifier">add</span><span class="Other">(</span><span class="Identifier">x</span><span class="Other">)</span>
+<span class="Identifier">doAssert</span> <span class="Identifier">s1</span> <span class="Operator">==</span>
+    <span class="Operator">@</span><span class="Other">[</span><span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'b'</span><span class="Other">,</span> <span class="CharLit">'a'</span><span class="Other">,</span> <span class="CharLit">'b'</span><span class="Other">]</span><span class="Other">,</span> <span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'b'</span><span class="Other">,</span> <span class="CharLit">'b'</span><span class="Other">,</span> <span class="CharLit">'a'</span><span class="Other">]</span><span class="Other">,</span> <span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'a'</span><span class="Other">,</span> <span class="CharLit">'b'</span><span class="Other">,</span> <span class="CharLit">'b'</span><span class="Other">]</span><span class="Other">,</span> <span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'a'</span><span class="Other">,</span> <span class="CharLit">'b'</span><span class="Other">,</span> <span class="CharLit">'b'</span><span class="Other">]</span><span class="Other">,</span>
+      <span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'b'</span><span class="Other">,</span> <span class="CharLit">'b'</span><span class="Other">,</span> <span class="CharLit">'a'</span><span class="Other">]</span><span class="Other">,</span> <span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'b'</span><span class="Other">,</span> <span class="CharLit">'a'</span><span class="Other">,</span> <span class="CharLit">'b'</span><span class="Other">]</span><span class="Other">]</span>
+<span class="Identifier">doAssert</span> <span class="Identifier">s2</span> <span class="Operator">==</span>
+    <span class="Operator">@</span><span class="Other">[</span><span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'z'</span><span class="Other">,</span> <span class="CharLit">'z'</span><span class="Other">,</span> <span class="CharLit">'z'</span><span class="Other">]</span><span class="Other">,</span> <span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'z'</span><span class="Other">,</span> <span class="CharLit">'z'</span><span class="Other">,</span> <span class="CharLit">'z'</span><span class="Other">]</span><span class="Other">,</span> <span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'z'</span><span class="Other">,</span> <span class="CharLit">'z'</span><span class="Other">,</span> <span class="CharLit">'z'</span><span class="Other">]</span><span class="Other">,</span> <span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'z'</span><span class="Other">,</span> <span class="CharLit">'z'</span><span class="Other">,</span> <span class="CharLit">'z'</span><span class="Other">]</span><span class="Other">,</span>
+      <span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'z'</span><span class="Other">,</span> <span class="CharLit">'z'</span><span class="Other">,</span> <span class="CharLit">'z'</span><span class="Other">]</span><span class="Other">,</span> <span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'z'</span><span class="Other">,</span> <span class="CharLit">'z'</span><span class="Other">,</span> <span class="CharLit">'z'</span><span class="Other">]</span><span class="Other">]</span></pre>
 
 </dd>
 
@@ -1758,7 +1801,7 @@ Iterator producing tuples with Cartesian product of the arguments. Equivalent to
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2018-10-03 19:09:36 UTC</small>
+        <small>Made with Nim. Generated: 2018-10-04 09:51:32 UTC</small>
       </div>
     </div>
   </div>
