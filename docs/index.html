@@ -1289,6 +1289,14 @@ function main() {
     title="combinations(n, r: Positive): seq[int]"><wbr />combinations<span class="attachedType" style="visibility:hidden"></span></a></li>
   <li><a class="reference" href="#combinations.i,openArray[T],Positive"
     title="combinations[T](s: openArray[T]; r: Positive): seq[T]"><wbr />combinations<span class="attachedType" style="visibility:hidden"></span></a></li>
+  <li><a class="reference" href="#chunked.i,openArray[T],Positive"
+    title="chunked[T](s: openArray[T]; size: Positive): seq[T]"><wbr />chunked<span class="attachedType" style="visibility:hidden"></span></a></li>
+  <li><a class="reference" href="#windowed.i,openArray[T],Positive"
+    title="windowed[T](s: openArray[T]; size: Positive): seq[T]"><wbr />windowed<span class="attachedType" style="visibility:hidden"></span></a></li>
+  <li><a class="reference" href="#pairwise.i,openArray[T]"
+    title="pairwise[T](s: openArray[T]): seq[T]"><wbr />pairwise<span class="attachedType" style="visibility:hidden"></span></a></li>
+  <li><a class="reference" href="#unique.i,openArray[T]"
+    title="unique[T](s: openArray[T]): T"><wbr />unique<span class="attachedType" style="visibility:hidden"></span></a></li>
 
   </ul>
 </li>
@@ -1843,6 +1851,71 @@ Iterator producing tuples with Cartesian product of the arguments. Equivalent to
       <span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'8'</span><span class="Other">,</span> <span class="CharLit">'5'</span><span class="Other">]</span><span class="Other">,</span> <span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'7'</span><span class="Other">,</span> <span class="CharLit">'6'</span><span class="Other">]</span><span class="Other">,</span> <span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'7'</span><span class="Other">,</span> <span class="CharLit">'5'</span><span class="Other">]</span><span class="Other">,</span> <span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'6'</span><span class="Other">,</span> <span class="CharLit">'5'</span><span class="Other">]</span><span class="Other">]</span></pre>
 
 </dd>
+<dt id="chunked"><a name="chunked.i,openArray[T],Positive"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">chunked</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">size</span><span class="Other">:</span> <span class="Identifier">Positive</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
+<dd>
+Iterator which yields <tt class="docutils literal"><span class="pre">size</span></tt>-sized chunks from <tt class="docutils literal"><span class="pre">s</span></tt>.
+<strong class="examples_text">Examples:</strong>
+<pre class="listing"><span class="Keyword">let</span>
+  <span class="Identifier">a</span> <span class="Other">=</span> <span class="StringLit">&quot;abcde&quot;</span>
+  <span class="Identifier">b</span> <span class="Other">=</span> <span class="Other">[</span><span class="DecNumber">11</span><span class="Other">,</span> <span class="DecNumber">12</span><span class="Other">,</span> <span class="DecNumber">13</span><span class="Other">,</span> <span class="DecNumber">14</span><span class="Other">,</span> <span class="DecNumber">15</span><span class="Other">,</span> <span class="DecNumber">16</span><span class="Other">,</span> <span class="DecNumber">17</span><span class="Other">,</span> <span class="DecNumber">18</span><span class="Other">]</span>
+<span class="Keyword">var</span>
+  <span class="Identifier">s1</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span><span class="Other">]</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="Other">]</span>
+  <span class="Identifier">s2</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">]</span><span class="Other">]</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="Other">]</span>
+<span class="Keyword">for</span> <span class="Identifier">x</span> <span class="Keyword">in</span> <span class="Identifier">chunked</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="DecNumber">2</span><span class="Other">)</span><span class="Other">:</span>
+  <span class="Identifier">s1</span><span class="Other">.</span><span class="Identifier">add</span><span class="Other">(</span><span class="Identifier">x</span><span class="Other">)</span>
+<span class="Keyword">for</span> <span class="Identifier">x</span> <span class="Keyword">in</span> <span class="Identifier">chunked</span><span class="Other">(</span><span class="Identifier">b</span><span class="Other">,</span> <span class="DecNumber">3</span><span class="Other">)</span><span class="Other">:</span>
+  <span class="Identifier">s2</span><span class="Other">.</span><span class="Identifier">add</span><span class="Other">(</span><span class="Identifier">x</span><span class="Other">)</span>
+<span class="Identifier">doAssert</span> <span class="Identifier">s1</span> <span class="Operator">==</span>
+    <span class="Operator">@</span><span class="Other">[</span><span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'a'</span><span class="Other">,</span> <span class="CharLit">'b'</span><span class="Other">]</span><span class="Other">,</span> <span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'c'</span><span class="Other">,</span> <span class="CharLit">'d'</span><span class="Other">]</span><span class="Other">,</span> <span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'e'</span><span class="Other">]</span><span class="Other">]</span>
+<span class="Identifier">doAssert</span> <span class="Identifier">s2</span> <span class="Operator">==</span>
+    <span class="Operator">@</span><span class="Other">[</span><span class="Operator">@</span><span class="Other">[</span><span class="DecNumber">11</span><span class="Other">,</span> <span class="DecNumber">12</span><span class="Other">,</span> <span class="DecNumber">13</span><span class="Other">]</span><span class="Other">,</span> <span class="Operator">@</span><span class="Other">[</span><span class="DecNumber">14</span><span class="Other">,</span> <span class="DecNumber">15</span><span class="Other">,</span> <span class="DecNumber">16</span><span class="Other">]</span><span class="Other">,</span> <span class="Operator">@</span><span class="Other">[</span><span class="DecNumber">17</span><span class="Other">,</span> <span class="DecNumber">18</span><span class="Other">]</span><span class="Other">]</span></pre>
+
+</dd>
+<dt id="windowed"><a name="windowed.i,openArray[T],Positive"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">windowed</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">size</span><span class="Other">:</span> <span class="Identifier">Positive</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
+<dd>
+Iterator which yields <tt class="docutils literal"><span class="pre">size</span></tt>-sized moving window from <tt class="docutils literal"><span class="pre">s</span></tt>.
+<strong class="examples_text">Examples:</strong>
+<pre class="listing"><span class="Keyword">let</span>
+  <span class="Identifier">a</span> <span class="Other">=</span> <span class="StringLit">&quot;abcde&quot;</span>
+  <span class="Identifier">b</span> <span class="Other">=</span> <span class="Other">[</span><span class="DecNumber">11</span><span class="Other">,</span> <span class="DecNumber">12</span><span class="Other">,</span> <span class="DecNumber">13</span><span class="Other">,</span> <span class="DecNumber">14</span><span class="Other">,</span> <span class="DecNumber">15</span><span class="Other">,</span> <span class="DecNumber">16</span><span class="Other">]</span>
+<span class="Keyword">var</span>
+  <span class="Identifier">s1</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span><span class="Other">]</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="Other">]</span>
+  <span class="Identifier">s2</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">]</span><span class="Other">]</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="Other">]</span>
+<span class="Keyword">for</span> <span class="Identifier">x</span> <span class="Keyword">in</span> <span class="Identifier">windowed</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="DecNumber">2</span><span class="Other">)</span><span class="Other">:</span>
+  <span class="Identifier">s1</span><span class="Other">.</span><span class="Identifier">add</span><span class="Other">(</span><span class="Identifier">x</span><span class="Other">)</span>
+<span class="Keyword">for</span> <span class="Identifier">x</span> <span class="Keyword">in</span> <span class="Identifier">windowed</span><span class="Other">(</span><span class="Identifier">b</span><span class="Other">,</span> <span class="DecNumber">3</span><span class="Other">)</span><span class="Other">:</span>
+  <span class="Identifier">s2</span><span class="Other">.</span><span class="Identifier">add</span><span class="Other">(</span><span class="Identifier">x</span><span class="Other">)</span>
+<span class="Identifier">doAssert</span> <span class="Identifier">s1</span> <span class="Operator">==</span>
+    <span class="Operator">@</span><span class="Other">[</span><span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'a'</span><span class="Other">,</span> <span class="CharLit">'b'</span><span class="Other">]</span><span class="Other">,</span> <span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'b'</span><span class="Other">,</span> <span class="CharLit">'c'</span><span class="Other">]</span><span class="Other">,</span> <span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'c'</span><span class="Other">,</span> <span class="CharLit">'d'</span><span class="Other">]</span><span class="Other">,</span> <span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'d'</span><span class="Other">,</span> <span class="CharLit">'e'</span><span class="Other">]</span><span class="Other">]</span>
+<span class="Identifier">doAssert</span> <span class="Identifier">s2</span> <span class="Operator">==</span>
+    <span class="Operator">@</span><span class="Other">[</span><span class="Operator">@</span><span class="Other">[</span><span class="DecNumber">11</span><span class="Other">,</span> <span class="DecNumber">12</span><span class="Other">,</span> <span class="DecNumber">13</span><span class="Other">]</span><span class="Other">,</span> <span class="Operator">@</span><span class="Other">[</span><span class="DecNumber">12</span><span class="Other">,</span> <span class="DecNumber">13</span><span class="Other">,</span> <span class="DecNumber">14</span><span class="Other">]</span><span class="Other">,</span> <span class="Operator">@</span><span class="Other">[</span><span class="DecNumber">13</span><span class="Other">,</span> <span class="DecNumber">14</span><span class="Other">,</span> <span class="DecNumber">15</span><span class="Other">]</span><span class="Other">,</span> <span class="Operator">@</span><span class="Other">[</span><span class="DecNumber">14</span><span class="Other">,</span> <span class="DecNumber">15</span><span class="Other">,</span> <span class="DecNumber">16</span><span class="Other">]</span><span class="Other">]</span></pre>
+
+</dd>
+<dt id="pairwise"><a name="pairwise.i,openArray[T]"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">pairwise</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span></pre></dt>
+<dd>
+Convenience wrapper. The same as <tt class="docutils literal"><span class="pre">windowed(s, 2)</span></tt>.
+
+</dd>
+<dt id="unique"><a name="unique.i,openArray[T]"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">unique</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">openArray</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">T</span></pre></dt>
+<dd>
+Iterator which yields unique members of <tt class="docutils literal"><span class="pre">s</span></tt>, keeping the original order.
+<strong class="examples_text">Examples:</strong>
+<pre class="listing"><span class="Keyword">let</span>
+  <span class="Identifier">a</span> <span class="Other">=</span> <span class="StringLit">&quot;baobab&quot;</span>
+  <span class="Identifier">b</span> <span class="Other">=</span> <span class="Other">[</span><span class="DecNumber">3</span><span class="Other">,</span> <span class="DecNumber">4</span><span class="Other">,</span> <span class="DecNumber">3</span><span class="Other">,</span> <span class="DecNumber">3</span><span class="Other">,</span> <span class="DecNumber">3</span><span class="Other">,</span> <span class="DecNumber">4</span><span class="Other">,</span> <span class="DecNumber">3</span><span class="Other">,</span> <span class="DecNumber">3</span><span class="Other">]</span>
+<span class="Keyword">var</span>
+  <span class="Identifier">s1</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">char</span><span class="Other">]</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="Other">]</span>
+  <span class="Identifier">s2</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">]</span> <span class="Other">=</span> <span class="Operator">@</span><span class="Other">[</span><span class="Other">]</span>
+<span class="Keyword">for</span> <span class="Identifier">x</span> <span class="Keyword">in</span> <span class="Identifier">unique</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">)</span><span class="Other">:</span>
+  <span class="Identifier">s1</span><span class="Other">.</span><span class="Identifier">add</span><span class="Other">(</span><span class="Identifier">x</span><span class="Other">)</span>
+<span class="Keyword">for</span> <span class="Identifier">x</span> <span class="Keyword">in</span> <span class="Identifier">unique</span><span class="Other">(</span><span class="Identifier">b</span><span class="Other">)</span><span class="Other">:</span>
+  <span class="Identifier">s2</span><span class="Other">.</span><span class="Identifier">add</span><span class="Other">(</span><span class="Identifier">x</span><span class="Other">)</span>
+<span class="Identifier">doAssert</span> <span class="Identifier">s1</span> <span class="Operator">==</span>
+    <span class="Operator">@</span><span class="Other">[</span><span class="CharLit">'b'</span><span class="Other">,</span> <span class="CharLit">'a'</span><span class="Other">,</span> <span class="CharLit">'o'</span><span class="Other">]</span>
+<span class="Identifier">doAssert</span> <span class="Identifier">s2</span> <span class="Operator">==</span>
+    <span class="Operator">@</span><span class="Other">[</span><span class="DecNumber">3</span><span class="Other">,</span> <span class="DecNumber">4</span><span class="Other">]</span></pre>
+
+</dd>
 
 </dl></div>
 
@@ -1853,7 +1926,7 @@ Iterator producing tuples with Cartesian product of the arguments. Equivalent to
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2018-10-04 11:14:00 UTC</small>
+        <small>Made with Nim. Generated: 2018-10-16 19:17:54 UTC</small>
       </div>
     </div>
   </div>

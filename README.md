@@ -2,6 +2,8 @@
 
 This package is a Nim rewrite of a [very popular Python module](https://docs.python.org/3/library/itertools.html) of the same name.
 
+It also includes some of the iterators from [iterutils](https://boltons.readthedocs.io/en/latest/iterutils.html).
+
 &nbsp;
 
 
@@ -42,6 +44,12 @@ Required Nim version is at least 0.18.0.
     * distinctPermutations
     * permutations
     * combinations
+
+* iterutils iterators:
+    * chunked
+    * windowed
+    * pairwise
+    * unique
 
 
 &nbsp;
@@ -177,6 +185,38 @@ for i in combinations(5, 3):
 for i in combinations(numbers, 2):
   echo i
 # @[1, 3]; @[1, 7]; @[1, 8]; @[1, 4]; @[3, 7]; @[3, 8]; @[3, 4]; @[7, 8]; @[7, 4]; @[8, 4]
+```
+
+
+
+
+### Iterutils iterators
+
+```nim
+import itertools
+
+
+let # you can use: sequences, arrays, strings
+  numbers = @[1, 3, 7, 8, 4, 2, 6, 5, 9]
+  constants = [2.7183, 3.1416, 1.4142, 1.7321]
+  word = "abracadabra"
+
+
+for i in chunked(numbers, 3):
+  echo i
+# @[1, 3, 7]; @[8, 4, 2]; @[6, 5, 9]
+
+for i in windowed(numbers, 4):
+  echo i
+# @[1, 3, 7, 8]; @[3, 7, 8, 4]; @[7, 8, 4, 2]; @[8, 4, 2, 6]; @[4, 2, 6, 5]; @[2, 6, 5, 9]
+
+for i in pairwise(constants):
+  echo i
+# @[2.7183, 3.1416]; @[3.1416, 1.4142]; @[1.4142, 1.7321]
+
+for i in unique(word):
+  echo i
+# a; b; r; c; d
 ```
 
 

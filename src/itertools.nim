@@ -608,6 +608,83 @@ iterator combinations*[T](s: openArray[T], r: Positive): seq[T] =
 
 
 
+iterator chunked*[T](s: openArray[T], size: Positive): seq[T] =
+  ## Iterator which yields ``size``-sized chunks from ``s``.
+  runnableExamples:
+      let
+        a = "abcde"
+        b = [11, 12, 13, 14, 15, 16, 17, 18]
+      var
+        s1: seq[seq[char]] = @[]
+        s2: seq[seq[int]] = @[]
+      for x in chunked(a, 2):
+        s1.add(x)
+      for x in chunked(b, 3):
+        s2.add(x)
+      doAssert s1 == @[@['a', 'b'], @['c', 'd'], @['e']]
+      doAssert s2 == @[@[11, 12, 13], @[14, 15, 16], @[17, 18]]
+
+  var i: int
+  while i + size < len(s):
+    yield s[i ..< i+size]
+    i += size
+  yield s[i .. ^1]
+
+
+
+iterator windowed*[T](s: openArray[T], size: Positive): seq[T] =
+  ## Iterator which yields ``size``-sized moving window from ``s``.
+  runnableExamples:
+      let
+        a = "abcde"
+        b = [11, 12, 13, 14, 15, 16]
+      var
+        s1: seq[seq[char]] = @[]
+        s2: seq[seq[int]] = @[]
+      for x in windowed(a, 2):
+        s1.add(x)
+      for x in windowed(b, 3):
+        s2.add(x)
+      doAssert s1 == @[@['a', 'b'], @['b', 'c'], @['c', 'd'], @['d', 'e']]
+      doAssert s2 == @[@[11, 12, 13], @[12, 13, 14], @[13, 14, 15], @[14, 15, 16]]
+
+  var i: int
+  while i + size <= len(s):
+    yield s[i ..< i+size]
+    inc i
+
+
+iterator pairwise*[T](s: openArray[T]): seq[T] =
+  ## Convenience wrapper. The same as ``windowed(s, 2)``.
+  for x in windowed(s, 2):
+    yield x
+
+
+iterator unique*[T](s: openArray[T]): T =
+  ## Iterator which yields unique members of ``s``, keeping the original order.
+  runnableExamples:
+      let
+        a = "baobab"
+        b = [3, 4, 3, 3, 3, 4, 3, 3]
+      var
+        s1: seq[char] = @[]
+        s2: seq[int] = @[]
+      for x in unique(a):
+        s1.add(x)
+      for x in unique(b):
+        s2.add(x)
+      doAssert s1 == @['b', 'a', 'o']
+      doAssert s2 == @[3, 4]
+        
+  var seen: seq[T] = @[]
+  for x in s:
+    if x notin seen:
+      seen.add(x)
+      yield x
+
+
+
+
 when isMainModule:
   # needed to run the tests in ``runnableExamples``
   discard count(3)()
@@ -629,3 +706,6 @@ when isMainModule:
   for _ in permutations(@[1, 2, 3]): break
   for _ in combinations(5, 2): break
   for _ in combinations(@[1, 2, 3], 2): break
+  for _ in chunked(@[1, 2, 3], 2): break
+  for _ in windowed(@[1, 2, 3], 2): break
+  for _ in unique(@[1, 2, 3]): break
