@@ -1,6 +1,4 @@
-import algorithm
-import sets
-import tables
+import algorithm, sets, tables
 
 
 proc count*(start: SomeNumber): iterator(): SomeNumber =
@@ -675,12 +673,14 @@ iterator unique*[T](s: openArray[T]): T =
         s2.add(x)
       doAssert s1 == @['b', 'a', 'o']
       doAssert s2 == @[3, 4]
-        
+
   var seen = initSet[T]()
   for x in s:
     if x notin seen:
       seen.incl(x)
       yield x
+
+
 
 
 when isMainModule:
