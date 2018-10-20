@@ -1,4 +1,4 @@
-import algorithm, tables
+import algorithm, sets, tables
 
 
 proc count*(start: SomeNumber): iterator(): SomeNumber =
@@ -607,7 +607,6 @@ iterator combinations*[T](s: openArray[T], r: Positive): seq[T] =
     yield x
 
 
-
 iterator chunked*[T](s: openArray[T], size: Positive): seq[T] =
   ## Iterator which yields ``size``-sized chunks from ``s``.
   runnableExamples:
@@ -629,7 +628,6 @@ iterator chunked*[T](s: openArray[T], size: Positive): seq[T] =
     yield s[i ..< i+size]
     i += size
   yield s[i .. ^1]
-
 
 
 iterator windowed*[T](s: openArray[T], size: Positive): seq[T] =
@@ -675,11 +673,11 @@ iterator unique*[T](s: openArray[T]): T =
         s2.add(x)
       doAssert s1 == @['b', 'a', 'o']
       doAssert s2 == @[3, 4]
-        
-  var seen: seq[T] = @[]
+
+  var seen = initSet[T]()
   for x in s:
     if x notin seen:
-      seen.add(x)
+      seen.incl(x)
       yield x
 
 
