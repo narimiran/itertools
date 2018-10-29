@@ -413,6 +413,46 @@ iterator takeWhile*[T](s: openArray[T], f: proc(a: T): bool): T =
       break
 
 
+iterator product*[T](s: openArray[T], repeat: Positive): seq[T] =
+  ## Iterator yielding Cartesian products of ``s`` with itself, ``repeat``
+  ## number of times.
+  runnableExamples:
+      let
+        a = [0, 1]
+        b = "abc"
+      var
+        s1: seq[seq[int]] = @[]
+        s2: seq[seq[char]] = @[]
+      for x in product(a, 3):
+        s1.add(x)
+      for x in product(b, 2):
+        s2.add(x)
+      doAssert s1 == @[@[0, 0, 0], @[0, 0, 1], @[0, 1, 0], @[0, 1, 1],
+                       @[1, 0, 0], @[1, 0, 1], @[1, 1, 0], @[1, 1, 1]]
+      doAssert s2 == @[@['a', 'a'], @['a', 'b'], @['a', 'c'], @['b', 'a'],
+                       @['b', 'b'], @['b', 'c'], @['c', 'a'], @['c', 'b'],
+                       @['c', 'c']]
+
+  var counters = newSeq[int](repeat)
+
+  block outer:
+    while true:
+      var result = newSeq[T](repeat)
+      for i, cnt in counters:
+        result[i] = s[cnt]
+      yield result
+
+      var i = repeat - 1
+      while true:
+        inc counters[i]
+        if counters[i] == s.len:
+          counters[i] = 0
+          dec i
+        else: break
+        if i < 0:
+          break outer
+
+
 iterator product*[T, U](s1: openArray[T], s2: openArray[U]): tuple[a: T, b: U] =
   ## Iterator producing tuples with Cartesian product of the arguments.
   ## Equivalent to nested for-loops.
@@ -697,6 +737,7 @@ when isMainModule:
   for _ in groupBy(@[1, 2], proc(x: int): bool = x mod 2 == 0): break
   for _ in islice(@[1, 2, 3], 2): break
   for _ in takeWhile(@[1, 2], proc(a: int): bool = a < 2): break
+  for _ in product([9, 8], 3): break
   for _ in product(@[1, 2], @[3, 4]): break
   for _ in product(@[1, 2], @[3, 4], @[5, 6]): break
   for _ in product(@[1, 2], @[3, 4], @[5, 6], @[7, 8]): break

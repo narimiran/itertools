@@ -166,6 +166,10 @@ let # you can use: sequences, arrays, strings
   word = "abba"
 
 
+for i in product([0, 1], repeat = 3):
+  echo i
+# @[0, 0, 0]; @[0, 0, 1]; @[0, 1, 0]; @[0, 1, 1]; @[1, 0, 0]; @[1, 0, 1]; @[1, 1, 0]; @[1, 1, 1]
+
 for i in product(numbers, constants):
   echo i
 # (a: 1, b: 2.7183); (a: 1, b: 3.1416); (a: 3, b: 2.7183); (a: 3, b: 3.1416); (a: 7, b: 2.7183); (a: 7, b: 3.1416); (a: 8, b: 2.7183); (a: 8, b: 3.1416); (a: 4, b: 2.7183); (a: 4, b: 3.1416)
