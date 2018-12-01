@@ -65,28 +65,39 @@ For more comprehensive examples, see the [documentation](https://narimiran.githu
 
 ### Infinite iterators
 
+WARNING: Version 0.3.0 introduced breaking changes regarding how these three iterators are implemented and used.
+See the examples below for the new behaviour.
+
 ```nim
 import itertools
 
-let a = count(100, 30)
-for _ in 1 .. 5:
-  echo a()
-# 100; 130; 160; 190; 220
+for i in count(5):
+  if i > 9: break
+  echo i
+# 5; 6; 7; 8; 9
 
-let b = cycle(@["I", "repeat", "myself"])
-for _ in 1 .. 8:
-  echo b()
+for i in count(100, 30):
+  if i > 200: break
+  echo i
+# 100; 130; 160; 190
+
+var n = 0
+for i in @["I", "repeat", "myself"].cycle:
+  inc n
+  if n > 8: break
+  echo i
 # I; repeat; myself; I; repeat; myself; I; repeat
 
-let c = repeat("Beetlejuice")
-for _ in 1 .. 3:
-  echo c()
+for i in "Beetlejuice".repeat(3):
+  echo i
 # Beetlejuice; Beetlejuice; Beetlejuice
 
-let d = repeat(9.99, 4)
-for x in d():
-  echo x
-# 9.99; 9.99; 9.99; 9.99
+var k = 0
+for i in "forever".repeat:
+  inc k
+  if k > 6: break
+  echo i
+# forever; forever; forever; forever; forever; forever
 ```
 
 
