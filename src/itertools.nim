@@ -84,7 +84,7 @@ iterator cycle*[T](s: openArray[T]): T =
 
 
 iterator repeat*[T](x: T, times = -1): T =
-  ## Infinite iterator which yields an object ``x`` infinite numer of times if
+  ## Infinite iterator which yields an object ``x`` infinite number of times if
   ## ``times`` is not specified.
   ##
   ## If ``times`` is specified, it runs that number of times.
@@ -303,7 +303,7 @@ iterator groupBy*[T](s: openArray[T]): tuple[k: T, v: seq[T]] =
 
 
 iterator groupBy*[T, U](s: openArray[T], f: proc(a: T): U): tuple[k: U, v: seq[T]] =
-  ## Iterator which groupse the elements based on applying a procedure ``f``
+  ## Iterator which groups the elements based on applying a procedure ``f``
   ## on each element, yielding a tuple ``(key, group)``.
   runnableExamples:
       let
