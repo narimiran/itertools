@@ -288,10 +288,16 @@ iterator groupBy*[T](s: openArray[T]): tuple[k: T, v: seq[T]] =
         s1.add(x)
       for x in groupBy(b):
         s2.add(x)
-      doAssert s1 == @[(k: 1, v: @[1, 1]), (k: 2, v: @[2, 2, 2]),
-                      (k: 5, v: @[5, 5]), (k: 7, v: @[7])]
-      doAssert s2 == @[(k: 'a', v: @['a', 'a', 'a']), (k: 'b', v: @['b', 'b', 'b']),
-                      (k: 'd', v: @['d']), (k: 'n', v: @['n'])]
+      when NimVersion < "1.0.99":
+        doAssert s1 == @[(k: 1, v: @[1, 1]), (k: 2, v: @[2, 2, 2]),
+                        (k: 5, v: @[5, 5]), (k: 7, v: @[7])]
+        doAssert s2 == @[(k: 'a', v: @['a', 'a', 'a']), (k: 'b', v: @['b', 'b', 'b']),
+                        (k: 'd', v: @['d']), (k: 'n', v: @['n'])]
+      else:
+        doAssert s1 == @[(k: 1, v: @[1, 1]), (k: 7, v: @[7]),
+                         (k: 2, v: @[2, 2, 2]), (k: 5, v: @[5, 5])]
+        doAssert s2 == @[(k: 'd', v: @['d']), (k: 'a', v: @['a', 'a', 'a']),
+                         (k: 'b', v: @['b', 'b', 'b']), (k: 'n', v: @['n'])]
 
   var t = initTable[T, seq[T]]()
   for x in s:
