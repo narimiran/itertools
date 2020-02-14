@@ -328,8 +328,8 @@ iterator groupBy*[T, U](s: openArray[T], f: proc(a: T): U): tuple[k: U, v: seq[T
       doAssert s1 == @[(k: true, v: @[1, 5, 7, 5, 1]), (k: false, v: @[2, 2, 2])]
       doAssert s2 == @[(k: true, v: @['a', 'a', 'a']),
                       (k: false, v: @['b', 'b', 'b', 'n', 'd'])]
-      doAssert s3 == @[(k: 2, v: @["ac", "dc"]), (k: 3, v: @["who"]),
-                      (k: 5, v: @["cream", "clash"])]
+      import algorithm
+      doAssert s3.sortedByIt(it.k) == @[(k: 2, v: @["ac", "dc"]), (k: 3, v: @["who"]), (k: 5, v: @["cream", "clash"])]
 
   var t = initTable[U, seq[T]]()
   for x in s:
