@@ -288,11 +288,13 @@ iterator groupBy*[T](s: openArray[T]): tuple[k: T, v: seq[T]] =
         s1.add(x)
       for x in groupBy(b):
         s2.add(x)
+
       import algorithm
-      doAssert s1.sortedByIt(it.k) ==
-        @[(k: 1, v: @[1, 1]), (k: 2, v: @[2, 2, 2]), (k: 5, v: @[5, 5]), (k: 7, v: @[7])]
-      doAssert s2.sortedByIt(it.k) ==
-        @[(k: 'a', v: @['a', 'a', 'a']), (k: 'b', v: @['b', 'b', 'b']), (k: 'd', v: @['d']), (k: 'n', v: @['n'])]
+      doAssert s1.sortedByIt(it.k) == @[(k: 1, v: @[1, 1]), (k: 2, v: @[2, 2, 2]),
+                                        (k: 5, v: @[5, 5]), (k: 7, v: @[7])]
+      doAssert s2.sortedByIt(it.k) == @[
+        (k: 'a', v: @['a', 'a', 'a']), (k: 'b', v: @['b', 'b', 'b']),
+        (k: 'd', v: @['d']), (k: 'n', v: @['n'])]
 
   var t = initTable[T, seq[T]]()
   for x in s:
@@ -325,11 +327,14 @@ iterator groupBy*[T, U](s: openArray[T], f: proc(a: T): U): tuple[k: U, v: seq[T
         s2.add(x)
       for x in groupBy(c, length):
         s3.add(x)
-      doAssert s1 == @[(k: true, v: @[1, 5, 7, 5, 1]), (k: false, v: @[2, 2, 2])]
-      doAssert s2 == @[(k: true, v: @['a', 'a', 'a']),
-                      (k: false, v: @['b', 'b', 'b', 'n', 'd'])]
+
       import algorithm
-      doAssert s3.sortedByIt(it.k) == @[(k: 2, v: @["ac", "dc"]), (k: 3, v: @["who"]), (k: 5, v: @["cream", "clash"])]
+      doAssert s1.sortedByIt(it.k) == @[(k: false, v: @[2, 2, 2]),
+                                        (k: true, v: @[1, 5, 7, 5, 1])]
+      doAssert s2.sortedByIt(it.k) == @[(k: false, v: @['b', 'b', 'b', 'n', 'd']),
+                                        (k: true, v: @['a', 'a', 'a'])]
+      doAssert s3.sortedByIt(it.k) == @[(k: 2, v: @["ac", "dc"]), (k: 3, v: @["who"]),
+                                        (k: 5, v: @["cream", "clash"])]
 
   var t = initTable[U, seq[T]]()
   for x in s:
@@ -709,7 +714,7 @@ iterator unique*[T](s: openArray[T]): T =
       doAssert s1 == @['b', 'a', 'o']
       doAssert s2 == @[3, 4]
 
-  var seen = initSet[T]()
+  var seen = initHashSet[T]()
   for x in s:
     if x notin seen:
       seen.incl(x)
