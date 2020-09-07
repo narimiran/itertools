@@ -1,3 +1,60 @@
+##[
+
+This package is a Nim rewrite of a
+[very popular Python module](https://docs.python.org/3/library/itertools.html)
+of the same name.
+
+It also includes some of the iterators from
+[iterutils](https://boltons.readthedocs.io/en/latest/iterutils.html).
+
+
+
+Installation
+------------
+
+```
+nimble install itertools
+```
+
+Required Nim version is at least 0.18.0.
+
+
+
+Supported iterators
+-------------------
+
+* infinite iterators:
+    * count
+    * cycle
+    * repeat
+
+* terminating iterators:
+    * accumulate
+    * chain
+    * compress
+    * dropWhile
+    * filterFalse
+    * groupBy
+    * islice
+    * takeWhile
+
+* combinatoric iterators:
+    * product
+    * distinctPermutations
+    * permutations
+    * combinations
+
+* iterutils iterators:
+    * chunked
+    * windowed
+    * pairwise
+    * unique
+
+]##
+
+
+
+
 import algorithm, sets, tables
 
 
