@@ -35,6 +35,7 @@ Supported iterators
     * dropWhile
     * filterFalse
     * groupBy
+    * groupConsecutive
     * islice
     * takeWhile
 
@@ -408,6 +409,85 @@ iterator groupBy*[T, U](s: openArray[T], f: proc(a: T): U): tuple[k: U, v: seq[T
     t.mGetOrPut(fx, @[]).add(x)
   for x in t.pairs:
     yield x
+
+
+iterator groupConsecutive*[T](s: openArray[T]): tuple[k: T, v: seq[T]] =
+  ## Iterator which groups the same *consecutive* elements together,
+  ## yielding a tuple ``(key, group)``.
+  runnableExamples:
+      let
+        a = [1, 1, 1, 2, 3, 3, 1, 2, 2, 2]
+        b = "abcaabccc"
+      var
+        s1: seq[tuple[k: int, v: seq[int]]] = @[]
+        s2: seq[tuple[k: char, v: seq[char]]] = @[]
+
+      for x in groupConsecutive(a):
+        s1.add(x)
+      for x in groupConsecutive(b):
+        s2.add(x)
+
+      doAssert s1 == @[(1, @[1, 1, 1]), (2, @[2]), (3, @[3, 3]), (1, @[1]), (2, @[2, 2, 2])]
+      doAssert s2 == @[('a', @['a']), ('b', @['b']), ('c', @['c']),
+                       ('a', @['a', 'a']), ('b', @['b']), ('c', @['c', 'c', 'c'])]
+
+  var k = s[0]
+  var v = @[k]
+  var i = 1
+  while i < s.len:
+    if s[i] != k:
+      yield (k, v)
+      k = s[i]
+      v = @[k]
+    else:
+      v.add k
+    inc i
+  yield (k, v)
+
+
+iterator groupConsecutive*[T, U](s: openArray[T], f: proc(a: T): U): tuple[k: U, v: seq[T]] =
+  ## Iterator which groups the *consecutive* elements based on applying a procedure ``f``
+  ## on each element, yielding a tuple ``(key, group)``.
+  runnableExamples:
+      let
+        a = @[1, 3, 5, 2, 1, 3, 5, 2, 4, 6, 1]
+        b = ['a', 'b', 'c', 'a', 'b', 'a', 'a', 'd']
+        c = ["ac", "dc", "dylan", "who", "cream", "clash"]
+      proc isOdd(x: int): bool = x mod 2 == 1
+      proc isA(x: char): bool = x == 'a'
+      proc length(x: string): int = x.len
+
+      var s1: seq[tuple[k: bool, v: seq[int]]] = @[]
+      var s2: seq[tuple[k: bool, v: seq[char]]] = @[]
+      var s3: seq[tuple[k: int, v: seq[string]]] = @[]
+
+      for x in groupConsecutive(a, isOdd):
+        s1.add(x)
+      for x in groupConsecutive(b, isA):
+        s2.add(x)
+      for x in groupConsecutive(c, length):
+        s3.add(x)
+
+      doAssert s1 == @[(true, @[1, 3, 5]), (false, @[2]), (true, @[1, 3, 5]),
+                       (false, @[2, 4, 6]), (true, @[1])]
+      doAssert s2 == @[(true, @['a']), (false, @['b', 'c']), (true, @['a']),
+                       (false, @['b']), (true, @['a', 'a']), (false, @['d'])]
+      doAssert s3 == @[(2, @["ac", "dc"]), (5, @["dylan"]), (3, @["who"]),
+                       (5, @["cream", "clash"])]
+
+  var k = f(s[0])
+  var v = @[s[0]]
+  var i = 1
+  while i < s.len:
+    let fx = f(s[i])
+    if fx != k:
+      yield (k, v)
+      k = fx
+      v = @[s[i]]
+    else:
+      v.add s[i]
+    inc i
+  yield (k, v)
 
 
 iterator islice*[T](s: openArray[T], start = 0, stop = -1, step = 1): T =

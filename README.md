@@ -36,6 +36,7 @@ Required Nim version is at least 0.18.0.
     * dropWhile
     * filterFalse
     * groupBy
+    * groupConsecutive
     * islice
     * takeWhile
 
@@ -139,6 +140,10 @@ for key, group in numbers.groupBy(x => x mod 2 == 0):
 for key, group in word.groupBy():
   echo group
 # @['a', 'a', 'a', 'a', 'a']; @['b', 'b']; @['c']; @['d']; @['r', 'r']
+
+for key, group in groupConsecutive("aaabaabb"):
+  echo group
+# @['a', 'a', 'a']; @['b']; @['a', 'a']; @['b', 'b']
 
 for i in islice(numbers, 5):
   echo i
