@@ -232,6 +232,21 @@ iterator chain*[T](xs: varargs[seq[T]]): T =
     for x in arg:
       yield x
 
+iterator chain*(xs: varargs[string]): char =
+  ## Iterator which yields characters of each passed string.
+  runnableExamples:
+      let
+        a = "abc"
+        b = "xyz"
+      var s1: string = ""
+      for x in chain(a, b):
+        s1.add x
+      doAssert s1 == "abcxyz"
+
+  for arg in xs:
+    for x in arg:
+      yield x
+
 
 iterator compress*[T](s: openArray[T], b: openArray[bool]): T =
   ## Iterator which yields only those elements of a sequence ``s`` for which
