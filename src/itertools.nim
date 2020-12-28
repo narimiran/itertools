@@ -290,11 +290,7 @@ iterator dropWhile*[T](s: openArray[T], f: proc(a: T): bool): T =
       doAssert s3 == @['h', 'd']
 
   var i = 0
-  while true and i < s.len:
-    if not f(s[i]):
-      yield s[i]
-      inc i
-      break
+  while i < s.len and f(s[i]):
     inc i
   while i < s.len:
     yield s[i]
@@ -355,9 +351,7 @@ iterator groupBy*[T](s: openArray[T]): tuple[k: T, v: seq[T]] =
 
   var t = initTable[T, seq[T]]()
   for x in s:
-    if not t.hasKey(x):
-      t[x] = @[]
-    t[x].add(x)
+    t.mGetOrPut(x, @[]).add(x)
   for x in t.pairs:
     yield x
 
@@ -396,9 +390,7 @@ iterator groupBy*[T, U](s: openArray[T], f: proc(a: T): U): tuple[k: U, v: seq[T
   var t = initTable[U, seq[T]]()
   for x in s:
     let fx = f(x)
-    if not t.hasKey(fx):
-      t[fx] = @[]
-    t[fx].add(x)
+    t.mGetOrPut(fx, @[]).add(x)
   for x in t.pairs:
     yield x
 
@@ -773,8 +765,7 @@ iterator unique*[T](s: openArray[T]): T =
 
   var seen = initHashSet[T]()
   for x in s:
-    if x notin seen:
-      seen.incl(x)
+    if not seen.containsOrIncl(x):
       yield x
 
 
