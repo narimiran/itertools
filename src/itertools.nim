@@ -54,6 +54,10 @@ Supported iterators
 ]##
 
 
+when defined(nimHasEffectsOf):
+  {.experimental: "strictEffects".}
+else:
+  {.pragma: effectsOf.}
 
 
 import algorithm, sets, tables
@@ -180,7 +184,7 @@ iterator repeat*[T](x: T, times = -1): T =
       yield x
 
 
-iterator accumulate*[T](s: openArray[T], f: proc(a, b: T): T): T =
+iterator accumulate*[T](s: openArray[T], f: proc(a, b: T): T): T {.effectsOf: f.} =
   ## Iterator which yields accumulated results of binary function ``f``.
   ##
   ## The result of ``f`` must be of the same type as members of ``s``.
@@ -280,7 +284,7 @@ iterator compress*[T](s: openArray[T], b: openArray[bool]): T =
       yield s[i]
 
 
-iterator dropWhile*[T](s: openArray[T], f: proc(a: T): bool): T =
+iterator dropWhile*[T](s: openArray[T], f: proc(a: T): bool): T {.effectsOf: f.} =
   ## Iterator which drops the elements from a sequence ``s`` as long as the
   ## predicate is ``true``. Afterwards, it returns every element.
   runnableExamples:
@@ -313,7 +317,7 @@ iterator dropWhile*[T](s: openArray[T], f: proc(a: T): bool): T =
     inc i
 
 
-iterator filterFalse*[T](s: openArray[T], f: proc(a: T): bool): T =
+iterator filterFalse*[T](s: openArray[T], f: proc(a: T): bool): T {.effectsOf: f.} =
   ## Iterator which filters the container ``s`` and yields only the elements
   ## for which ``f`` is false.
   runnableExamples:
@@ -372,7 +376,7 @@ iterator groupBy*[T](s: openArray[T]): tuple[k: T, v: seq[T]] =
     yield x
 
 
-iterator groupBy*[T, U](s: openArray[T], f: proc(a: T): U): tuple[k: U, v: seq[T]] =
+iterator groupBy*[T, U](s: openArray[T], f: proc(a: T): U): tuple[k: U, v: seq[T]] {.effectsOf: f.} =
   ## Iterator which groups the elements based on applying a procedure ``f``
   ## on each element, yielding a tuple ``(key, group)``.
   runnableExamples:
@@ -445,7 +449,7 @@ iterator groupConsecutive*[T](s: openArray[T]): tuple[k: T, v: seq[T]] =
   yield (k, v)
 
 
-iterator groupConsecutive*[T, U](s: openArray[T], f: proc(a: T): U): tuple[k: U, v: seq[T]] =
+iterator groupConsecutive*[T, U](s: openArray[T], f: proc(a: T): U): tuple[k: U, v: seq[T]] {.effectsOf: f.} =
   ## Iterator which groups the *consecutive* elements based on applying a procedure ``f``
   ## on each element, yielding a tuple ``(key, group)``.
   runnableExamples:
@@ -526,7 +530,7 @@ iterator islice*[T](s: openArray[T], start = 0, stop = -1, step = 1): T =
     i += step
 
 
-iterator takeWhile*[T](s: openArray[T], f: proc(a: T): bool): T =
+iterator takeWhile*[T](s: openArray[T], f: proc(a: T): bool): T {.effectsOf: f.} =
   ## Iterator which yields elements of ``s`` as long as predicate is true.
   runnableExamples:
       let
